@@ -1,6 +1,5 @@
 import { createClient } from '@supabase/supabase-js'
 
-export const dynamic = 'force-dynamic'
 
 const sb = createClient(
   'https://cinlfqmiiabwmeunowol.supabase.co',

@@ -105,12 +105,15 @@ export default function EngagementModelPage() {
       {/* Header */}
       <div style={{ borderBottom: '1px solid var(--border)', padding: 'clamp(44px,6vw,80px) clamp(16px,4vw,24px) clamp(32px,5vw,56px)', background: 'var(--bg2)' }}>
         <div style={{ maxWidth: '1280px', margin: '0 auto' }}>
-          <div style={{ fontFamily: 'var(--font-mono)', fontSize: '11px', color: 'var(--orange)', letterSpacing: '0.1em', marginBottom: '12px' }}>HOW WE WORK</div>
+          <div style={{ fontFamily: 'var(--font-mono)', fontSize: '11px', color: 'var(--orange)', letterSpacing: '0.1em', marginBottom: '12px' }}>HOW WE ENGAGE</div>
           <h1 style={{ fontFamily: 'var(--font-display)', fontSize: 'clamp(36px,6vw,76px)', fontWeight: 600, letterSpacing: '-0.04em', lineHeight: 1.0, color: 'var(--text)', marginBottom: '20px' }}>
-            YOUR AI IMPLEMENTATION<br />ROADMAP —<br />HOW STRATAI ENGAGES.
+            YOUR AI IMPLEMENTATION ROADMAP.<br />FROM FIRST CONVERSATION TO P&amp;L IMPACT.
           </h1>
-          <p style={{ color: 'var(--text2)', fontSize: '17px', maxWidth: '580px', lineHeight: '1.65', marginBottom: '32px' }}>
-            StratAI does not run AI projects. We build long-term AI Advantage Systems through a structured engagement model that begins before you pay a rupee.
+          <p style={{ color: 'var(--text2)', fontSize: '17px', maxWidth: '580px', lineHeight: '1.65', marginBottom: '8px' }}>
+            Free half-day audit → 1-month deep dive → long-term AI build and retainer.
+          </p>
+          <p style={{ color: 'var(--text)', fontSize: '17px', fontWeight: 600, maxWidth: '580px', lineHeight: '1.65', marginBottom: '32px' }}>
+            No experiments. Only outcomes.
           </p>
           <Link href="/contact" style={{ display: 'inline-flex', padding: '12px 28px', borderRadius: '9999px', background: 'var(--orange)', fontFamily: 'var(--font-mono)', fontSize: '11px', fontWeight: 700, letterSpacing: '0.08em', color: '#fff', textDecoration: 'none' }}>
             → Book Your Free Half-Day Audit

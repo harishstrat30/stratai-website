@@ -1,5 +1,3 @@
-export const dynamic = 'force-dynamic'
-export const revalidate = 0
 
 import { getTeam } from '@/lib/supabase'
 import Link from 'next/link'
@@ -21,13 +19,17 @@ export const metadata = {
 
 const AVATAR_COLORS = ['#FF5500', '#1A1917', '#2563EB', '#16A34A']
 
+const LOCAL_AVATARS = { 'palani': '/palani.jpeg', 'dyanesh': '/dyanesh.jpeg', 'arvin': '/arvin.jpeg' }
+
 function TeamAvatar({ member, index }) {
   const initials = (member.name || '?').split(' ').map(w => w[0]).join('').slice(0, 2).toUpperCase()
   const color = AVATAR_COLORS[index % AVATAR_COLORS.length]
-  if (member.avatar_url) {
+  const firstName = (member.name || '').split(' ')[0].toLowerCase()
+  const avatarSrc = member.avatar_url || LOCAL_AVATARS[firstName]
+  if (avatarSrc) {
     return (
       <div style={{ width: '96px', height: '96px', borderRadius: '50%', overflow: 'hidden', marginBottom: '20px', border: '3px solid var(--border)', boxShadow: '0 2px 12px rgba(0,0,0,0.08)' }}>
-        <img src={member.avatar_url} alt={member.name} style={{ width: '100%', height: '100%', objectFit: 'cover', display: 'block' }} />
+        <img src={avatarSrc} alt={member.name} style={{ width: '100%', height: '100%', objectFit: 'cover', display: 'block' }} />
       </div>
     )
   }
@@ -62,9 +64,12 @@ export default async function AboutPage() {
       <div style={{ background: 'var(--bg2)', borderBottom: '1px solid var(--border)' }}>
         <div style={{ maxWidth: '1280px', margin: '0 auto', padding: 'clamp(40px,6vw,72px) clamp(16px,4vw,24px)' }}>
           <div style={{ fontFamily: 'var(--font-mono)', fontSize: '11px', color: 'var(--orange)', letterSpacing: '0.1em', marginBottom: '14px' }}>WHAT MAKES AI WORK IN MANUFACTURING</div>
-          <h2 style={{ fontFamily: 'var(--font-display)', fontSize: 'clamp(24px,4vw,48px)', fontWeight: 600, letterSpacing: '-0.04em', color: 'var(--text)', marginBottom: '48px', lineHeight: 1.05 }}>
-            Why StratAI? Our Domain-First Principle for Industrial AI Services.
+          <h2 style={{ fontFamily: 'var(--font-display)', fontSize: 'clamp(24px,4vw,48px)', fontWeight: 600, letterSpacing: '-0.04em', color: 'var(--text)', marginBottom: '16px', lineHeight: 1.05 }}>
+            Why StratAI?
           </h2>
+          <p style={{ fontSize: '15px', color: 'var(--text2)', marginBottom: '48px', lineHeight: 1.6 }}>
+            AI implementation in manufacturing requires five things. Most firms have one or two. We have all five.
+          </p>
           <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fill, minmax(280px, 1fr))', gap: '1px', background: 'var(--border)' }}>
             {[
               { num: '01', title: 'Change Management',          desc: 'AI does not replace processes — it changes behaviour. Implementation without change management produces systems that are never used.' },

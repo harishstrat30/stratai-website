@@ -1,5 +1,3 @@
-export const dynamic = "force-dynamic"
-export const revalidate = 0
 
 import { getPosts, getCategories } from '@/lib/supabase'
 import Link from 'next/link'
@@ -12,11 +10,11 @@ export const metadata = {
   ],
   alternates: { canonical: 'https://stratai.io/blog' },
 }
-export default async function BlogPage({ searchParams }) {
-  const page = Number(searchParams?.page||1), cat = searchParams?.category||null
-  const { posts=[], total=0, limit=9 } = await getPosts({ page, limit:9, category:cat }).catch(()=>({ posts:[], total:0, limit:9 }))
+export default async function BlogPage() {
+  const page = 1, cat = null
+  const { posts=[], total=0, limit=50 } = await getPosts({ page:1, limit:50, category:null }).catch(()=>({ posts:[], total:0, limit:50 }))
   const categories = await getCategories().catch(()=>[])
-  const totalPages = Math.ceil(total/limit)
+  const totalPages = 1
   return (
     <div style={{ background:'var(--bg)', minHeight:'100vh' }}>
       <div className="dot-grid" style={{ background:'var(--bg2)', borderBottom:'1px solid var(--border)', padding:'72px 24px 48px' }}>

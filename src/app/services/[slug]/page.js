@@ -9,9 +9,10 @@ async function getService(slug) {
   const { data } = await sb.from('services').select('*').eq('slug',slug).eq('status','published').single()
   return data
 }
-// Fully server-rendered — reflects edits/deletes instantly
-export const dynamic = "force-dynamic"
-export const revalidate = 0
+export async function generateStaticParams() {
+  const { data } = await sb.from('services').select('slug').eq('status','published')
+  return (data || []).map(r => ({ slug: r.slug }))
+}
 
 const SERVICES_SEO = {
   'ai-quality-control-services': {

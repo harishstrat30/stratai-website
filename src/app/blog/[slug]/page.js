@@ -4,8 +4,10 @@ import { notFound } from 'next/navigation'
 import Link from 'next/link'
 import AuthorBlock from '@/components/ui/AuthorBlock'
 
-export const dynamic = "force-dynamic"
-export const revalidate = 0
+export async function generateStaticParams() {
+  const slugs = await getAllPostSlugs()
+  return slugs || []
+}
 
 const BLOG_SEO = {
   'ai-implementation-manufacturing-cxo-guide': {

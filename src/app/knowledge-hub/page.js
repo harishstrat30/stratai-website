@@ -1,7 +1,6 @@
 import Link from 'next/link'
 import { createClient } from '@supabase/supabase-js'
 
-export const dynamic = 'force-dynamic'
 
 export const metadata = {
   alternates: { canonical: 'https://stratai.io/knowledge-hub' },
@@ -150,22 +149,6 @@ export default async function KnowledgeHubPage({ searchParams }) {
                   <div style={{ fontFamily: 'var(--font-mono)', fontSize: '10px', color: 'var(--text3)', lineHeight: '1.5' }}>{t.desc}</div>
                   <div style={{ fontFamily: 'var(--font-mono)', fontSize: '10px', color: TYPE_COLORS[t.key], marginTop: '12px', letterSpacing: '0.06em', fontWeight: 600 }}>BROWSE →</div>
                 </Link>
-              ))}
-              {/* Upcoming types */}
-              {upcomingTypes.map(t => (
-                <div key={t.key} style={{
-                  display: 'block', padding: '28px 24px', background: 'var(--bg2)',
-                  position: 'relative', overflow: 'hidden', opacity: 0.7,
-                }}>
-                  <div style={{ position: 'absolute', top: 0, left: 0, right: 0, height: '3px', background: 'var(--border2)' }} />
-                  <div style={{ position: 'absolute', top: '12px', right: '12px' }}>
-                    <span style={{ fontFamily: 'var(--font-mono)', fontSize: '8px', fontWeight: 700, letterSpacing: '0.1em', color: 'var(--text3)', background: 'var(--bg3)', border: '1px solid var(--border)', padding: '2px 7px', borderRadius: '9999px' }}>UPCOMING</span>
-                  </div>
-                  <div style={{ fontSize: '28px', marginBottom: '12px', filter: 'grayscale(0.5)' }}>{t.icon}</div>
-                  <div style={{ fontFamily: 'var(--font-display)', fontSize: '16px', fontWeight: 600, letterSpacing: '-0.02em', color: 'var(--text3)', marginBottom: '6px' }}>{t.label}</div>
-                  <div style={{ fontFamily: 'var(--font-mono)', fontSize: '10px', color: 'var(--text3)', lineHeight: '1.5' }}>{t.desc}</div>
-                  <div style={{ fontFamily: 'var(--font-mono)', fontSize: '10px', color: 'var(--text3)', marginTop: '12px', letterSpacing: '0.06em' }}>COMING SOON</div>
-                </div>
               ))}
             </div>
           </div>

@@ -12,8 +12,6 @@ import {
   getFeaturedTestimonials, getStats,
 } from '@/lib/supabase'
 
-export const dynamic   = 'force-dynamic'
-export const revalidate = 0
 
 export const metadata = {
   title: 'AI for Manufacturing Companies in India | StratAI™ — AI Advantage Systems',

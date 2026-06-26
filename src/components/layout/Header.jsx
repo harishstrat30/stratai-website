@@ -4,6 +4,14 @@ import Link from 'next/link'
 import { usePathname } from 'next/navigation'
 import StratAILogo from '@/components/ui/StratAILogo'
 
+// ── Claude Zone sub-items
+const CZ_ITEMS = [
+  { key: 'claude-solutions',       label: 'Claude Zone',             desc: 'AI insights powered by Claude' },
+  { key: 'claude-partner',         label: 'Claude Partner',          desc: 'Anthropic Claude Partner Network' },
+  { key: 'claude-training',        label: 'Claude Training',         desc: 'Claude AI workshops & upskilling' },
+  { key: 'claude-implementation',  label: 'Claude Implementation',   desc: 'Enterprise Claude deployment' },
+]
+
 // ── Knowledge Hub sub-items (active content only per M4 spec)
 const HUB_ITEMS = [
   { key: 'blog',        label: 'Blog',         icon: '✍️',  desc: 'Insights and practical guides' },
@@ -19,19 +27,23 @@ const SIMPLE_NAV = [
   { label: 'AI ADVANTAGE',      href: '/advantage-systems' },
   { label: 'ENGAGEMENT MODEL',  href: '/engagement-model' },
 ]
-const CZ_HREF = '/claude-solutions'
-
 export default function Header() {
   const [scrolled,   setScrolled]   = useState(false)
   const [hubOpen,    setHubOpen]    = useState(false)
   const [hubVisible, setHubVisible] = useState(false)
+  const [czOpen,     setCzOpen]     = useState(false)
+  const [czVisible,  setCzVisible]  = useState(false)
   const [mobileOpen, setMobileOpen] = useState(false)
   const [hubMobile,  setHubMobile]  = useState(false)
+  const [czMobile,   setCzMobile]   = useState(false)
   const pathname   = usePathname()
   const closeTimer = useRef(null)
+  const czTimer    = useRef(null)
   const dropRef    = useRef(null)
+  const czDropRef  = useRef(null)
 
   const hubActive = pathname === '/knowledge-hub' || pathname.startsWith('/knowledge-hub/')
+  const czActive  = CZ_ITEMS.some(i => pathname === `/${i.key}` || pathname.startsWith(`/${i.key}/`))
 
   useEffect(() => {
     const fn = () => setScrolled(window.scrollY > 10)
@@ -39,10 +51,13 @@ export default function Header() {
     return () => window.removeEventListener('scroll', fn)
   }, [])
 
-  useEffect(() => { closeHub(); setMobileOpen(false); setHubMobile(false) }, [pathname])
+  useEffect(() => { closeHub(); closeCz(); setMobileOpen(false); setHubMobile(false); setCzMobile(false) }, [pathname])
 
   useEffect(() => {
-    const fn = (e) => { if (dropRef.current && !dropRef.current.contains(e.target)) closeHub() }
+    const fn = (e) => {
+      if (dropRef.current && !dropRef.current.contains(e.target)) closeHub()
+      if (czDropRef.current && !czDropRef.current.contains(e.target)) closeCz()
+    }
     document.addEventListener('mousedown', fn)
     return () => document.removeEventListener('mousedown', fn)
   }, [])
@@ -55,6 +70,10 @@ export default function Header() {
   function openHub()  { clearTimeout(closeTimer.current); setHubOpen(true); requestAnimationFrame(() => requestAnimationFrame(() => setHubVisible(true))) }
   function closeHub() { setHubVisible(false); closeTimer.current = setTimeout(() => setHubOpen(false), 200) }
   function toggleHub(){ if (hubOpen && hubVisible) closeHub(); else openHub() }
+
+  function openCz()   { clearTimeout(czTimer.current); setCzOpen(true); requestAnimationFrame(() => requestAnimationFrame(() => setCzVisible(true))) }
+  function closeCz()  { setCzVisible(false); czTimer.current = setTimeout(() => setCzOpen(false), 200) }
+  function toggleCz() { if (czOpen && czVisible) closeCz(); else openCz() }
 
   return (
     <>
@@ -84,10 +103,40 @@ export default function Header() {
               )
             })}
 
-            <Link href={CZ_HREF} style={{ display:'flex', alignItems:'center', gap:'5px', padding:'6px 10px', borderRadius:'9999px', fontFamily:'var(--font-mono)', fontSize:'11px', fontWeight:(pathname===CZ_HREF||pathname.startsWith(CZ_HREF+'/'))?600:500, letterSpacing:'0.06em', textDecoration:'none', color:(pathname===CZ_HREF||pathname.startsWith(CZ_HREF+'/'))?'#CC4E2A':'var(--text2)', background:(pathname===CZ_HREF||pathname.startsWith(CZ_HREF+'/'))?'rgba(204,78,42,0.08)':'transparent', border:(pathname===CZ_HREF||pathname.startsWith(CZ_HREF+'/'))?'1px solid rgba(204,78,42,0.25)':'1px solid transparent', transition:'all 0.15s', whiteSpace:'nowrap' }}>
-              <span style={{ width:'6px', height:'6px', borderRadius:'50%', background:'#CC4E2A', display:'inline-block', flexShrink:0, animation:'czpulse 2.5s ease infinite' }} />
-              CLAUDE ZONE
-            </Link>
+            {/* Claude Zone dropdown */}
+            <div ref={czDropRef} style={{ position: 'relative' }}>
+              <button onClick={toggleCz} onMouseEnter={openCz} onMouseLeave={() => { czTimer.current = setTimeout(closeCz, 120) }}
+                style={{ display:'flex', alignItems:'center', gap:'5px', padding:'6px 10px', borderRadius:'9999px', fontFamily:'var(--font-mono)', fontSize:'11px', fontWeight: czActive || (czOpen && czVisible) ? 600 : 500, letterSpacing:'0.06em', cursor:'pointer', border:'none', outline:'none', color: czActive || (czOpen && czVisible) ? '#CC4E2A' : 'var(--text2)', background: czActive ? 'rgba(204,78,42,0.08)' : (czOpen && czVisible) ? 'rgba(204,78,42,0.05)' : 'transparent', transition:'all 0.15s', whiteSpace:'nowrap' }}>
+                <span style={{ width:'6px', height:'6px', borderRadius:'50%', background:'#CC4E2A', display:'inline-block', flexShrink:0, animation:'czpulse 2.5s ease infinite' }} />
+                CLAUDE ZONE
+                <svg width="10" height="10" viewBox="0 0 10 10" fill="none" style={{ transition:'transform 0.2s', transform:(czOpen && czVisible)?'rotate(180deg)':'rotate(0deg)', opacity:0.5 }}>
+                  <path d="M2 3.5L5 6.5L8 3.5" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round"/>
+                </svg>
+              </button>
+
+              {czOpen && (
+                <div onMouseEnter={openCz} onMouseLeave={() => { czTimer.current = setTimeout(closeCz, 120) }}
+                  style={{ position:'absolute', top:'calc(100% + 10px)', left:'-16px', width:'300px', background:'#fff', border:'1px solid var(--border)', borderRadius:'12px', boxShadow:'0 8px 32px rgba(0,0,0,0.10)', overflow:'hidden', opacity: czVisible ? 1 : 0, transform: czVisible ? 'translateY(0) scale(1)' : 'translateY(-8px) scale(0.98)', transition:'opacity 0.18s ease, transform 0.18s ease', pointerEvents: czVisible ? 'auto' : 'none' }}>
+                  <div style={{ padding:'12px 16px', borderBottom:'1px solid var(--border)', display:'flex', alignItems:'center', justifyContent:'space-between' }}>
+                    <span style={{ fontFamily:'var(--font-mono)', fontSize:'10px', fontWeight:700, letterSpacing:'0.1em', color:'var(--text3)' }}>CLAUDE ZONE</span>
+                  </div>
+                  <div style={{ display:'flex', flexDirection:'column' }}>
+                    {CZ_ITEMS.map((item, i) => (
+                      <Link key={item.key} href={`/${item.key}`} onClick={closeCz}
+                        style={{ display:'flex', alignItems:'flex-start', gap:'12px', padding:'12px 16px', background:'#fff', textDecoration:'none', color:'inherit', transition:'background 0.12s', borderBottom: i < CZ_ITEMS.length-1 ? '1px solid var(--border)' : 'none' }}
+                        onMouseEnter={e => e.currentTarget.style.background = 'var(--bg2)'}
+                        onMouseLeave={e => e.currentTarget.style.background = '#fff'}>
+                        <span style={{ color:'#CC4E2A', fontFamily:'var(--font-mono)', fontSize:'11px', flexShrink:0, marginTop:'2px' }}>→</span>
+                        <div>
+                          <div style={{ fontFamily:'var(--font-mono)', fontSize:'11px', fontWeight:600, color:'var(--text)', marginBottom:'2px' }}>{item.label}</div>
+                          <div style={{ fontFamily:'var(--font-mono)', fontSize:'10px', color:'var(--text3)', lineHeight:1.4 }}>{item.desc}</div>
+                        </div>
+                      </Link>
+                    ))}
+                  </div>
+                </div>
+              )}
+            </div>
 
             {/* Knowledge Hub dropdown */}
             <div ref={dropRef} style={{ position: 'relative' }}>
@@ -161,10 +210,27 @@ export default function Header() {
               )
             })}
 
-            <Link href={CZ_HREF} style={{ padding:'14px 16px', fontFamily:'var(--font-mono)', fontSize:'13px', fontWeight:pathname.startsWith(CZ_HREF)?700:500, letterSpacing:'0.06em', color:pathname.startsWith(CZ_HREF)?'#CC4E2A':'var(--text2)', textDecoration:'none', borderRadius:'var(--rs)', background:pathname.startsWith(CZ_HREF)?'rgba(204,78,42,0.08)':'transparent', borderBottom:'1px solid var(--border)', display:'flex', alignItems:'center', gap:'8px' }}>
-              <span style={{ width:'6px', height:'6px', borderRadius:'50%', background:'#CC4E2A', display:'inline-block', animation:'czpulse 2.5s ease infinite' }} />
-              CLAUDE ZONE
-            </Link>
+            {/* Claude Zone mobile accordion */}
+            <button onClick={() => setCzMobile(!czMobile)}
+              style={{ padding:'14px 16px', fontFamily:'var(--font-mono)', fontSize:'13px', fontWeight:500, letterSpacing:'0.06em', color: czActive ? '#CC4E2A' : 'var(--text2)', borderRadius:'var(--rs)', background: czActive ? 'rgba(204,78,42,0.08)' : 'transparent', borderBottom:'1px solid var(--border)', border:'none', cursor:'pointer', display:'flex', alignItems:'center', justifyContent:'space-between', width:'100%', textAlign:'left', gap:'8px' }}>
+              <span style={{ display:'flex', alignItems:'center', gap:'8px' }}>
+                <span style={{ width:'6px', height:'6px', borderRadius:'50%', background:'#CC4E2A', display:'inline-block', flexShrink:0, animation:'czpulse 2.5s ease infinite' }} />
+                CLAUDE ZONE
+              </span>
+              <svg width="12" height="12" viewBox="0 0 10 10" fill="none" style={{ transition:'transform 0.2s', transform: czMobile ? 'rotate(180deg)' : 'rotate(0deg)' }}>
+                <path d="M2 3.5L5 6.5L8 3.5" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round"/>
+              </svg>
+            </button>
+            {czMobile && (
+              <div style={{ paddingLeft:'8px', display:'flex', flexDirection:'column', gap:'2px', borderBottom:'1px solid var(--border)', paddingBottom:'8px' }}>
+                {CZ_ITEMS.map(item => (
+                  <Link key={item.key} href={`/${item.key}`}
+                    style={{ padding:'10px 16px', display:'flex', alignItems:'center', gap:'8px', fontFamily:'var(--font-mono)', fontSize:'12px', color:'var(--text2)', textDecoration:'none', borderRadius:'var(--rs)' }}>
+                    <span style={{ color:'#CC4E2A' }}>→</span>{item.label}
+                  </Link>
+                ))}
+              </div>
+            )}
 
             {/* Knowledge Hub mobile accordion */}
             <button onClick={() => setHubMobile(!hubMobile)}

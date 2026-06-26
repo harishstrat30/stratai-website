@@ -5,9 +5,10 @@ import AuthorBlock from '@/components/ui/AuthorBlock'
 
 const sb = createClient('https://cinlfqmiiabwmeunowol.supabase.co','sb_publishable_cgStjgEhCnFlQi58_VYFvA_6gRE-tYo')
 
-// Fully server-rendered
-export const dynamic = "force-dynamic"
-export const revalidate = 0
+export async function generateStaticParams() {
+  const { data } = await sb.from('resources').select('slug').eq('status','published')
+  return (data || []).map(r => ({ slug: r.slug }))
+}
 
 
 

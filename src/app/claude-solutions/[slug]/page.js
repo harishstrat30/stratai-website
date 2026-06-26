@@ -1,15 +1,11 @@
-'use client'
-import { useEffect } from 'react'
-import { useParams, useRouter } from 'next/navigation'
+import { redirect } from 'next/navigation'
+import { getAllClaudeSolutionSlugs } from '@/lib/supabase'
+
+export async function generateStaticParams() {
+  const slugs = await getAllClaudeSolutionSlugs().catch(() => [])
+  return slugs || []
+}
 
 export default function ClaudeSolutionSlug() {
-  const { slug } = useParams()
-  const router = useRouter()
-
-  useEffect(() => {
-    // Redirect to parent page — the detail panel opens client-side
-    router.replace('/claude-solutions')
-  }, [])
-
-  return null
+  redirect('/claude-solutions')
 }

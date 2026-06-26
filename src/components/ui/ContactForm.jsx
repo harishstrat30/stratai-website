@@ -1,7 +1,29 @@
 'use client'
 import { useState, useRef } from 'react'
 import { usePathname } from 'next/navigation'
-import { submitLead } from '@/lib/actions'
+import { createClient } from '@supabase/supabase-js'
+
+const sb = createClient('https://cinlfqmiiabwmeunowol.supabase.co','sb_publishable_cgStjgEhCnFlQi58_VYFvA_6gRE-tYo')
+
+async function submitLead(fd) {
+  const get = k => fd.get(k)?.toString().trim() || null
+  const name = get('name')
+  const email = fd.get('email')?.toString().trim().toLowerCase()
+  if (!name || !email) return { success: false, error: 'Name and email are required.' }
+  if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)) return { success: false, error: 'Please enter a valid email address.' }
+  const { error } = await sb.from('leads').insert({
+    name, email,
+    phone: get('phone'),
+    company: get('company'),
+    service_interest: get('service_interest'),
+    message: get('message'),
+    source: get('source') || 'website',
+    lead_source_page: get('lead_source_page'),
+    lead_source_url: get('lead_source_url'),
+  })
+  if (error) return { success: false, error: 'Something went wrong. Please try again.' }
+  return { success: true }
+}
 
 const SERVICES = [
   'AI Strategy Consulting',

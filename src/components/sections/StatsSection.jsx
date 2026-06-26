@@ -26,14 +26,14 @@ function CountUp({ target, suffix }) {
 
 // CLA-148: Updated fallback numbers
 const FALLBACK = [
-  { value: 12,     suffix: '+', label: 'RETAINER CLIENTS',    sub: 'Long-term AI Advantage builds' },
-  { value: 12,     suffix: '+', label: 'AI USE CASES DEPLOYED', sub: 'Running in production' },
-  { value: 90,     suffix: '%+', label: 'CLIENT RETENTION',   sub: 'Proof of domain-first delivery' },
-  { value: 100000, suffix: '+', label: 'EMAILS ANALYSED',     sub: 'Precot Intelligence Programme' },
+  { value: 12,     suffix: '+',  label: 'RETAINER CLIENTS',                      sub: 'Long-term AI Advantage builds' },
+  { value: 12,     suffix: '+',  label: 'AI USE CASES LIVE IN PRODUCTION',        sub: 'Running in production today' },
+  { value: 90,     suffix: '%+', label: 'CLIENT RETENTION RATE',                  sub: 'Proof of domain-first delivery' },
+  { value: 100000, suffix: '+',  label: 'EMAILS ANALYSED — PRECOT AI PROGRAMME',  sub: 'Live in production' },
 ]
 
 export default function StatsSection({ stats = [] }) {
-  const items = (Array.isArray(stats) && stats.length > 0) ? stats : FALLBACK
+  const items = FALLBACK
   return (
     <section style={{ background: 'var(--bg)', borderTop: '1px solid var(--border)', borderBottom: '1px solid var(--border)' }}>
       <div className="stats-grid" style={{ maxWidth: '1280px', margin: '0 auto', display: 'grid', gridTemplateColumns: `repeat(${items.length}, 1fr)`, gap: '1px', background: 'var(--border)' }}>

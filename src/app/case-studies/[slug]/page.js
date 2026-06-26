@@ -6,8 +6,11 @@ import Link from 'next/link'
 import AuthorBlock from '@/components/ui/AuthorBlock'
 import ContactForm from '@/components/ui/ContactForm'
 
-export const dynamic = 'force-dynamic'
-export const revalidate = 0
+export async function generateStaticParams() {
+  const sb = createClient('https://cinlfqmiiabwmeunowol.supabase.co','sb_publishable_cgStjgEhCnFlQi58_VYFvA_6gRE-tYo')
+  const { data } = await sb.from('case_studies').select('slug').eq('status','published')
+  return (data || []).map(r => ({ slug: r.slug }))
+}
 
 const CASE_STUDIES_SEO = {
   'jewellery-manufacturer-ai-catalogue-order-management': {
