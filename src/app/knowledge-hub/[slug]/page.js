@@ -10,6 +10,15 @@ export async function generateStaticParams() {
   return (data || []).map(r => ({ slug: r.slug }))
 }
 
+export async function generateMetadata({ params }) {
+  const { data } = await sb.from('resources').select('title,excerpt,resource_type').eq('slug', params.slug).eq('status','published').single()
+  if (!data) return {}
+  return {
+    title: { absolute: `${data.title} | StratAI™` },
+    description: data.excerpt || '',
+  }
+}
+
 
 
 const TYPE_COLORS = {
