@@ -65,12 +65,17 @@ async function getCaseStudies() {
 
 async function getTemplates() {
   const { data } = await sb
-    .from('v_knowledge_hub')
-    .select('*')
-    .eq('type', 'template')
+    .from('resources')
+    .select('id,title,slug,excerpt,published_at,read_time_minutes,resource_type,is_gated')
+    .eq('resource_type', 'template')
+    .eq('status', 'published')
     .order('published_at', { ascending: false })
     .limit(20)
-  return data ?? []
+  return (data ?? []).map(r => ({
+    ...r,
+    type: r.resource_type,
+    duration: r.read_time_minutes ? `${r.read_time_minutes} min read` : null,
+  }))
 }
 
 export default async function KnowledgeHubPage({ searchParams }) {

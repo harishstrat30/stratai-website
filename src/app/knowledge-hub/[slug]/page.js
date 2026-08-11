@@ -18,11 +18,34 @@ const TYPE_COLORS = {
 }
 
 export default async function HubItemPage({ params }) {
-  const { data: item } = await sb.from('v_knowledge_hub').select('*').eq('slug', params.slug).single()
-  if (!item) notFound()
+  const { data: raw } = await sb.from('resources').select('*').eq('slug', params.slug).eq('status', 'published').single()
+  if (!raw) notFound()
+
+  // Normalise resource fields to match the view shape used in the template
+  const item = {
+    ...raw,
+    type: raw.resource_type,
+    cover_image: raw.cover_url ?? null,
+    duration: raw.read_time_minutes ? `${raw.read_time_minutes} min read` : null,
+    content: raw.content ? { html: raw.content } : null,
+    author_name: null,
+    video_url: null,
+    podcast_url: null,
+  }
 
   const color = TYPE_COLORS[item.type] || 'var(--orange)'
-  const { data: related } = await sb.from('v_knowledge_hub').select('id,title,slug,type,duration,excerpt').eq('type', item.type).neq('slug', params.slug).limit(3)
+  const { data: relatedRaw } = await sb
+    .from('resources')
+    .select('id,title,slug,resource_type,read_time_minutes,excerpt')
+    .eq('resource_type', raw.resource_type)
+    .eq('status', 'published')
+    .neq('slug', params.slug)
+    .limit(3)
+  const related = (relatedRaw ?? []).map(r => ({
+    ...r,
+    type: r.resource_type,
+    duration: r.read_time_minutes ? `${r.read_time_minutes} min read` : null,
+  }))
 
   return (
     <div style={{ background:'var(--bg)', minHeight:'100vh' }}>
