@@ -52,13 +52,17 @@ async function getBlogPosts() {
 }
 
 async function getCaseStudies() {
+  // v_published_case_studies has: id,title,slug,client,industry,challenge,solution,results,published_at
+  // no excerpt column — use challenge as the card excerpt
   const { data } = await sb
     .from('v_published_case_studies')
-    .select('id,title,slug,excerpt,client,industry,published_at')
+    .select('id,title,slug,client,industry,challenge,published_at')
     .order('published_at', { ascending: false })
     .limit(20)
   return (data ?? []).map(cs => ({
-    ...cs, type: 'case-study',
+    ...cs,
+    type: 'case-study',
+    excerpt: cs.challenge,
     duration: null,
   }))
 }
