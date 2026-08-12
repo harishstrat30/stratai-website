@@ -43,8 +43,8 @@ async function getBlogPosts() {
   const { data } = await sb
     .from('v_published_posts')
     .select('id,title,slug,excerpt,published_at,read_time_minutes,category_name')
-    .order('published_at', { ascending: false })
-    .limit(20)
+    .order('published_at', { ascending: false, nullsFirst: false })
+    .limit(100)
   return (data ?? []).map(p => ({
     ...p, type: 'blog',
     duration: p.read_time_minutes ? `${p.read_time_minutes} min read` : null,
