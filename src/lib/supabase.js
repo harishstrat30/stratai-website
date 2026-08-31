@@ -71,6 +71,29 @@ export async function getFeaturedTestimonials() {
   if (error) throw error
   return data ?? []
 }
+// Featured video pinned at the top of /testimonials (page 1, no filter only —
+// callers exclude its id from the paginated list below so it isn't duplicated).
+export async function getFeaturedVideoTestimonial() {
+  const { data, error } = await supabase
+    .from('v_published_testimonials')
+    .select('*')
+    .eq('type', 'video')
+    .eq('is_featured', true)
+    .order('sort_order')
+    .limit(1)
+  if (error) throw error
+  return data?.[0] ?? null
+}
+export async function getTestimonials({ type = null, page = 1, limit = 12, excludeId = null } = {}) {
+  let q = supabase.from('v_published_testimonials').select('*', { count: 'exact' })
+  if (type) q = q.eq('type', type)
+  if (excludeId) q = q.neq('id', excludeId)
+  q = q.order('sort_order')
+  const from = (page - 1) * limit
+  const { data, error, count } = await q.range(from, from + limit - 1)
+  if (error) throw error
+  return { testimonials: data ?? [], total: count ?? 0, page, limit }
+}
 
 // ─── NAV ────────────────────────────────────────
 export async function getNav(location = 'header') {
