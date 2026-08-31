@@ -71,6 +71,11 @@ export async function getFeaturedTestimonials() {
   if (error) throw error
   return data ?? []
 }
+export async function getTestimonials() {
+  const { data, error } = await supabase.from('v_published_testimonials').select('*').order('sort_order')
+  if (error) throw error
+  return data ?? []
+}
 
 // ─── NAV ────────────────────────────────────────
 export async function getNav(location = 'header') {

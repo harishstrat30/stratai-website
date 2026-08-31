@@ -213,6 +213,23 @@ export function hubItemSchema(item) {
   return base
 }
 
+// ── Testimonial (Review) ───────────────────────────────────────────────────────
+export function testimonialSchema(t) {
+  return {
+    '@context': 'https://schema.org',
+    '@type': 'Review',
+    itemReviewed: { '@id': `${BASE_URL}/#organization` },
+    author: {
+      '@type': 'Person',
+      name: t.client_name,
+      ...(t.company ? { worksFor: { '@type': 'Organization', name: t.company } } : {}),
+    },
+    reviewRating: { '@type': 'Rating', ratingValue: t.rating || 5, bestRating: 5, worstRating: 1 },
+    reviewBody: t.quote || t.transcript || '',
+    datePublished: t.created_at,
+  }
+}
+
 // ── Helper: serialize schema to script tag content ────────────────────────────
 export function serializeSchema(schema) {
   return JSON.stringify(schema, null, 0)

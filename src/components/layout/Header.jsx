@@ -25,6 +25,7 @@ const SIMPLE_NAV = [
   { label: 'ABOUT',             href: '/about' },
   { label: 'SERVICES',          href: '/services' },
   { label: 'AI ADVANTAGE',      href: '/advantage-systems' },
+  { label: 'TESTIMONIALS',      href: '/testimonials' },
   { label: 'ENGAGEMENT MODEL',  href: '/engagement-model' },
 ]
 export default function Header() {
