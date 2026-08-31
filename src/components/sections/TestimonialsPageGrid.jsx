@@ -88,7 +88,10 @@ function TestimonialCard({ t, featured = false }) {
   )
 }
 
-export default function TestimonialsPageGrid({ testimonials = [] }) {
+// `featured` (the pinned hero) and `testimonials` (the current page's grid items) are
+// resolved server-side by the page — pagination/filtering means "which video is featured"
+// can't be derived by just looking at whatever page of results happens to be in view.
+export default function TestimonialsPageGrid({ testimonials = [], featured = null }) {
   const refs = useRef([])
 
   useEffect(() => {
@@ -101,7 +104,7 @@ export default function TestimonialsPageGrid({ testimonials = [] }) {
     return () => obs.disconnect()
   }, [testimonials])
 
-  if (testimonials.length === 0) {
+  if (testimonials.length === 0 && !featured) {
     return (
       <div style={{ textAlign: 'center', padding: '80px', color: 'var(--text3)', fontFamily: 'var(--font-mono)', fontSize: '12px', letterSpacing: '0.08em' }}>
         TESTIMONIALS COMING SOON
@@ -109,30 +112,29 @@ export default function TestimonialsPageGrid({ testimonials = [] }) {
     )
   }
 
-  const featuredVideo = testimonials.find(t => t.type === 'video' && t.is_featured) || testimonials.find(t => t.type === 'video')
-  const rest = featuredVideo ? testimonials.filter(t => t.id !== featuredVideo.id) : testimonials
-
   return (
     <div>
-      {featuredVideo && (
+      {featured && (
         <div style={{ maxWidth: '820px', margin: '0 auto 72px', padding: '0 24px' }}>
-          <TestimonialCard t={featuredVideo} featured />
+          <TestimonialCard t={featured} featured />
         </div>
       )}
 
-      <div style={{ maxWidth: '1280px', margin: '0 auto', padding: '0 24px' }}>
-        <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fill,minmax(320px,1fr))', gap: '1px', background: 'var(--border)' }}>
-          {rest.map((t, i) => (
-            <div
-              key={t.id}
-              ref={el => refs.current[i] = el}
-              style={{ opacity: 0, transform: 'translateY(16px)', transition: `opacity 0.6s ease ${i * 0.06}s, transform 0.6s ease ${i * 0.06}s`, background: 'var(--bg)' }}
-            >
-              <TestimonialCard t={t} />
-            </div>
-          ))}
+      {testimonials.length > 0 && (
+        <div style={{ maxWidth: '1280px', margin: '0 auto', padding: '0 24px' }}>
+          <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fill,minmax(320px,1fr))', gap: '1px', background: 'var(--border)' }}>
+            {testimonials.map((t, i) => (
+              <div
+                key={t.id}
+                ref={el => refs.current[i] = el}
+                style={{ opacity: 0, transform: 'translateY(16px)', transition: `opacity 0.6s ease ${i * 0.06}s, transform 0.6s ease ${i * 0.06}s`, background: 'var(--bg)' }}
+              >
+                <TestimonialCard t={t} />
+              </div>
+            ))}
+          </div>
         </div>
-      </div>
+      )}
     </div>
   )
 }

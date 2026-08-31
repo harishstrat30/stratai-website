@@ -1,4 +1,5 @@
-import { getTestimonials } from '@/lib/supabase'
+import Link from 'next/link'
+import { getTestimonials, getFeaturedVideoTestimonial } from '@/lib/supabase'
 import { testimonialSchema, breadcrumbSchema, serializeSchema } from '@/lib/schema'
 import TestimonialsPageGrid from '@/components/sections/TestimonialsPageGrid'
 
@@ -14,8 +15,40 @@ export const metadata = {
   ],
 }
 
-export default async function TestimonialsPage() {
-  const testimonials = await getTestimonials().catch(() => [])
+const LIMIT = 12
+const TYPE_TABS = [
+  { key: null, label: 'ALL' },
+  { key: 'video', label: '▶ VIDEO' },
+  { key: 'audio', label: '♫ AUDIO' },
+  { key: 'text', label: '" WRITTEN' },
+]
+
+function buildHref({ type, page }) {
+  const params = new URLSearchParams()
+  if (type) params.set('type', type)
+  if (page && page > 1) params.set('page', String(page))
+  const qs = params.toString()
+  return qs ? `/testimonials?${qs}` : '/testimonials'
+}
+
+export default async function TestimonialsPage({ searchParams }) {
+  const type = searchParams?.type && ['video', 'audio', 'text'].includes(searchParams.type) ? searchParams.type : null
+  const page = Math.max(1, parseInt(searchParams?.page || '1', 10) || 1)
+
+  // The pinned hero is only ever *shown* on the unfiltered first page, but it must
+  // stay excluded from the underlying paginated set on every page of the unfiltered
+  // view — otherwise it silently rejoins the list on page 2+, which shifts every
+  // later page by one and duplicates an item across the page boundary. Once a type
+  // filter is active there's no separate hero, so it's just a normal grid item there.
+  const featuredForExclusion = !type ? await getFeaturedVideoTestimonial().catch(() => null) : null
+  const featured = page === 1 ? featuredForExclusion : null
+
+  const { testimonials, total } = await getTestimonials({
+    type, page, limit: LIMIT, excludeId: featuredForExclusion?.id || null,
+  }).catch(() => ({ testimonials: [], total: 0 }))
+
+  const totalPages = Math.max(1, Math.ceil(total / LIMIT))
+  const allSchemaItems = featured ? [featured, ...testimonials] : testimonials
 
   return (
     <div style={{ background: 'var(--bg)', minHeight: '100vh' }}>
@@ -31,11 +64,45 @@ export default async function TestimonialsPage() {
         </div>
       </div>
 
-      <div style={{ padding: '64px 0' }}>
-        <TestimonialsPageGrid testimonials={testimonials} />
+      {/* Filter bar — same ?type= pattern as Knowledge Hub */}
+      <div style={{ borderBottom: '1px solid var(--border)', background: 'var(--bg)', position: 'sticky', top: '67px', zIndex: 100 }}>
+        <div style={{ maxWidth: '1280px', margin: '0 auto', padding: '12px 24px', display: 'flex', gap: '4px', overflowX: 'auto' }}>
+          {TYPE_TABS.map(t => {
+            const active = type === t.key
+            return (
+              <Link key={t.key || 'all'} href={buildHref({ type: t.key, page: 1 })} style={{
+                padding: '7px 16px', borderRadius: '9999px', fontFamily: 'var(--font-mono)', fontSize: '10px',
+                fontWeight: 600, letterSpacing: '0.07em', textDecoration: 'none', whiteSpace: 'nowrap',
+                background: active ? 'var(--text)' : 'transparent',
+                color: active ? '#fff' : 'var(--text2)',
+                border: active ? '1px solid var(--text)' : '1px solid var(--border)',
+              }}>{t.label}</Link>
+            )
+          })}
+        </div>
       </div>
 
-      {testimonials.map(t => (
+      <div style={{ padding: '64px 0' }}>
+        <TestimonialsPageGrid testimonials={testimonials} featured={featured} />
+
+        {totalPages > 1 && (
+          <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'center', gap: '14px', marginTop: '56px' }}>
+            {page > 1 && (
+              <Link href={buildHref({ type, page: page - 1 })} style={{ padding: '8px 20px', border: '1px solid var(--border)', borderRadius: '9999px', fontFamily: 'var(--font-mono)', fontSize: '11px', color: 'var(--text2)', textDecoration: 'none' }}>
+                ← PREV
+              </Link>
+            )}
+            <span style={{ fontFamily: 'var(--font-mono)', fontSize: '11px', color: 'var(--text3)' }}>{page} / {totalPages}</span>
+            {page < totalPages && (
+              <Link href={buildHref({ type, page: page + 1 })} style={{ padding: '8px 20px', border: '1px solid var(--border)', borderRadius: '9999px', fontFamily: 'var(--font-mono)', fontSize: '11px', color: 'var(--text2)', textDecoration: 'none' }}>
+                NEXT →
+              </Link>
+            )}
+          </div>
+        )}
+      </div>
+
+      {allSchemaItems.map(t => (
         <script key={t.id} type="application/ld+json" dangerouslySetInnerHTML={{ __html: serializeSchema(testimonialSchema(t)) }} />
       ))}
       <script
