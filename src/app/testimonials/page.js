@@ -56,7 +56,7 @@ export default async function TestimonialsPage({ searchParams }) {
         <div style={{ maxWidth: '1280px', margin: '0 auto' }}>
           <div style={{ fontFamily: 'var(--font-mono)', fontSize: '11px', color: 'var(--orange)', letterSpacing: '0.1em', marginBottom: '12px' }}>CLIENT VOICES</div>
           <h1 style={{ fontFamily: 'var(--font-display)', fontSize: 'clamp(36px,6vw,76px)', fontWeight: 600, letterSpacing: '-0.04em', lineHeight: 1.0, color: 'var(--text)', marginBottom: '18px' }}>
-            HEAR IT FROM THE<br />PEOPLE WE'VE HELPED.
+            WHAT OUR CLIENTS<br />SAY.
           </h1>
           <p style={{ color: 'var(--text2)', fontSize: '17px', maxWidth: '520px', lineHeight: '1.65' }}>
             Video, audio, and written testimonials from manufacturing leaders who put StratAI's AI Advantage Systems to work.
