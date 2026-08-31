@@ -78,7 +78,7 @@ function TestimonialCard({ t, featured = false }) {
       )}
 
       {t.quote && (
-        <p style={{ fontSize: featured ? '18px' : '15px', lineHeight: 1.75, color: 'var(--text)', fontStyle: t.type === 'text' ? 'italic' : 'normal', margin: 0 }}>
+        <p style={{ fontSize: featured ? '18px' : '15px', lineHeight: 1.75, color: 'var(--text)', fontStyle: 'italic', margin: 0 }}>
           &ldquo;{t.quote}&rdquo;
         </p>
       )}
