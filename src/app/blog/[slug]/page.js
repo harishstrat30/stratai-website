@@ -40,6 +40,9 @@ const BLOG_SEO = {
   },
 }
 
+const withBrandSuffix = (t) => `${t.replace(/(\s*\|\s*StratAI™?)+\s*$/i, '').trim()} | StratAI™`
+const demoteH1 = (html) => html.replace(/<h1(\s|>)/gi, '<h2$1').replace(/<\/h1>/gi, '</h2>')
+
 export async function generateMetadata({ params }) {
   const p = await getPost(params.slug).catch(() => null)
   if (!p) return { title: 'Post not found — StratAI' }
@@ -47,7 +50,7 @@ export async function generateMetadata({ params }) {
   const url  = p.canonical_url || `${base}/blog/${p.slug}`
   const seoOverride = BLOG_SEO[params.slug]
   return {
-    title:       seoOverride?.title       || p.meta_title    || p.title,
+    title:       { absolute: withBrandSuffix(seoOverride?.title || p.meta_title || p.title) },
     description: seoOverride?.description || p.meta_description || p.excerpt || '',
     robots:      p.robots        || 'index,follow',
     alternates:  { canonical: url },
@@ -158,7 +161,7 @@ export default async function BlogPostPage({ params }) {
 
           {/* Main content */}
           {post.content?.html
-            ? <div className="prose" dangerouslySetInnerHTML={{__html: post.content.html}} />
+            ? <div className="prose" dangerouslySetInnerHTML={{__html: demoteH1(post.content.html)}} />
             : <p style={{color:'var(--text3)',fontFamily:'var(--font-mono)',fontSize:'12px',letterSpacing:'0.06em'}}>CONTENT COMING SOON</p>
           }
 
