@@ -1,3 +1,4 @@
+import { ogImages } from '@/lib/og'
 import { serviceSchema, breadcrumbSchema, faqSchema, serializeSchema } from '@/lib/schema'
 import { getServices, getContentImages, getCTAButtons } from '@/lib/supabase'
 import { createClient } from '@supabase/supabase-js'
@@ -52,13 +53,13 @@ export async function generateMetadata({ params }) {
       title:       svc.og_title       || svc.meta_title    || svc.title,
       description: svc.og_description || svc.meta_description || svc.short_description || '',
       url, siteName: 'StratAI', type: 'website',
-      ...(svc.og_image_url ? { images: [{ url: svc.og_image_url, width: 1200, height: 630 }] } : {}),
+      images: ogImages(svc.og_image_url),
     },
     twitter: {
       card:        'summary_large_image',
       title:       svc.og_title       || svc.meta_title    || svc.title,
       description: svc.og_description || svc.meta_description || '',
-      ...(svc.og_image_url ? { images: [svc.og_image_url] } : {}),
+      images: [svc.og_image_url || '/og'],
     },
   }
 }

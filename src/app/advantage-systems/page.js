@@ -1,3 +1,4 @@
+import { DEFAULT_OG_IMAGE } from '@/lib/og'
 import Link from 'next/link'
 import Script from 'next/script'
 import SystemsAccordion from '@/components/sections/SystemsAccordion'
@@ -16,6 +17,7 @@ export const metadata = {
     title: 'AI Defect Detection, Predictive Maintenance & Supply Chain | StratAI™',
     description: 'StratAI builds 5 AI Advantage Systems for mid-market manufacturers. Quality, Throughput, Delivery, Revenue & Procurement Advantage — measurable in your P&L within 6 months.',
     url: 'https://stratai.io/advantage-systems',
+    images: [DEFAULT_OG_IMAGE],
   },
 }
 

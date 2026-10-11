@@ -1,3 +1,4 @@
+import { ogImages } from '@/lib/og'
 import { blogPostSchema, breadcrumbSchema, faqSchema, serializeSchema } from '@/lib/schema'
 import { getPost, getAllPostSlugs, getContentImages, getCTAButtons } from '@/lib/supabase'
 import { notFound } from 'next/navigation'
@@ -62,13 +63,13 @@ export async function generateMetadata({ params }) {
       url,
       siteName: 'StratAI',
       type: 'article',
-      ...(p.og_image_url ? { images: [{ url: p.og_image_url, width: 1200, height: 630 }] } : {}),
+      images: ogImages(p.og_image_url),
     },
     twitter: {
       card:        'summary_large_image',
       title:       p.og_title       || p.meta_title    || p.title,
       description: p.og_description || p.meta_description || '',
-      ...(p.og_image_url ? { images: [p.og_image_url] } : {}),
+      images: [p.og_image_url || '/og'],
     },
   }
 }

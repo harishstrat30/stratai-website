@@ -1,3 +1,4 @@
+import { DEFAULT_OG_IMAGE } from '@/lib/og'
 import './globals.css'
 import Header from '@/components/layout/Header'
 import Footer from '@/components/layout/Footer'
@@ -38,13 +39,13 @@ export async function generateMetadata() {
         title: 'AI for Manufacturing Companies in India | StratAI™',
         description: 'StratAI builds AI Advantage Systems for mid-market manufacturing companies in India. Measurable in your P&L within 6 months.',
         url: 'https://stratai.io',
-        images: [{ url: '/stratai-logo.png', width: 500, height: 500, alt: 'StratAI™ Logo' }],
+        images: [DEFAULT_OG_IMAGE],
       },
       twitter: {
         card: 'summary_large_image',
         title: 'StratAI™ — AI Advantage Systems for Manufacturing',
         description: 'AI Advantage Systems for mid-market manufacturing. QAS · TAS · DAS · RAS · PAS. Measurable P&L impact in 6 months.',
-        images: ['/stratai-logo.png'],
+        images: ['/og'],
       },
       icons: {
         icon: [
@@ -69,6 +70,7 @@ export async function generateMetadata() {
       },
       description: 'StratAI builds AI Advantage Systems for mid-market manufacturing companies. Measurable in your P&L within 6 months.',
       metadataBase: new URL('https://stratai.io'),
+      openGraph: { images: [DEFAULT_OG_IMAGE] },
       icons: {
         icon: '/favicon-32x32.png',
         apple: '/apple-touch-icon.png',

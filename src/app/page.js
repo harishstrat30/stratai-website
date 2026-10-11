@@ -1,3 +1,4 @@
+import { DEFAULT_OG_IMAGE } from '@/lib/og'
 import HeroSection         from '@/components/sections/HeroSection'
 import ContrastBlock       from '@/components/sections/ContrastBlock'
 import ClienteleSection    from '@/components/sections/ClienteleSection'
@@ -26,6 +27,7 @@ export const metadata = {
     title: 'AI for Manufacturing Companies in India | StratAI™',
     description: 'StratAI builds AI Advantage Systems for mid-market manufacturing companies in India. Measurable in your P&L within 6 months.',
     url: 'https://stratai.io/',
+    images: [DEFAULT_OG_IMAGE],
   },
 }
 

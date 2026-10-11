@@ -1,3 +1,4 @@
+import { DEFAULT_OG_IMAGE } from '@/lib/og'
 
 import { getTeam } from '@/lib/supabase'
 import Link from 'next/link'
@@ -14,6 +15,7 @@ export const metadata = {
     title: 'About StratAI™ | AI Consulting Partner for Mid-Market Manufacturers in India',
     description: "StratAI is India's specialist AI consulting partner for mid-market manufacturing companies. We design, build and implement AI Advantage Systems that show up in your P&L within 6 months.",
     url: 'https://stratai.io/about',
+    images: [DEFAULT_OG_IMAGE],
   },
 }
 

@@ -1,3 +1,4 @@
+import { DEFAULT_OG_IMAGE } from '@/lib/og'
 import Link from 'next/link'
 
 export const metadata = {
@@ -13,6 +14,7 @@ export const metadata = {
     title: 'AI Consulting Services for Manufacturers | StratAI™ India',
     description: "Explore StratAI's AI consulting services for manufacturing companies. Strategy, architecture, implementation & ongoing support — built for measurable P&L impact.",
     url: 'https://stratai.io/services',
+    images: [DEFAULT_OG_IMAGE],
   },
 }
 

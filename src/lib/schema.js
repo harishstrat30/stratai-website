@@ -16,9 +16,9 @@ export function orgSchema() {
     url: BASE_URL,
     logo: {
       '@type': 'ImageObject',
-      url: `${BASE_URL}/logo.png`,
-      width: 200,
-      height: 60,
+      url: `${BASE_URL}/stratai-logo.png`,
+      width: 500,
+      height: 500,
     },
     description: 'Building AI Advantage Systems for mid-market manufacturing companies. Quality, Throughput, Delivery, Revenue, and Procurement Advantage — measurable in your P&L within 6 months.',
     address: {

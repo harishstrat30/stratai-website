@@ -1,3 +1,4 @@
+import { DEFAULT_OG_IMAGE } from '@/lib/og'
 import Link from 'next/link'
 import Script from 'next/script'
 
@@ -26,6 +27,7 @@ export const metadata = {
     title: 'AI Implementation Roadmap & Engagement Model | StratAI™',
     description: 'Learn how StratAI delivers your AI implementation roadmap — from a free half-day audit to long-term AI build and retainer. No experiments. Only outcomes in your P&L.',
     url: 'https://stratai.io/engagement-model',
+    images: [DEFAULT_OG_IMAGE],
   },
 }
 

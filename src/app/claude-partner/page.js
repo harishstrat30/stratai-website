@@ -1,3 +1,4 @@
+import { DEFAULT_OG_IMAGE } from '@/lib/og'
 import Link from 'next/link'
 
 export const metadata = {
@@ -13,6 +14,7 @@ export const metadata = {
     title: 'Anthropic Claude Partner — AI Consulting Services for Manufacturing | StratAI™',
     description: 'StratAI is an official Anthropic Claude Partner Network member, delivering Claude-based AI consulting services and implementation for mid-market manufacturing companies in India.',
     url: 'https://stratai.io/claude-partner',
+    images: [DEFAULT_OG_IMAGE],
   },
 }
 
