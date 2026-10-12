@@ -1,21 +1,56 @@
 'use client'
-import { useState } from 'react'
+import { useEffect, useState } from 'react'
 import Link from 'next/link'
 
 export default function SystemsAccordion({ systems }) {
   const [active, setActive] = useState(systems[0].id)
-  const sys = systems.find(s => s.id === active)
+
+  useEffect(() => {
+    const ids = systems.map(s => s.id)
+    const openFromHash = (hash) => {
+      const id = (hash || '').replace('#', '').toLowerCase()
+      if (!ids.includes(id)) return
+      setActive(id)
+      requestAnimationFrame(() => document.getElementById(id)?.scrollIntoView({ block: 'start' }))
+    }
+    openFromHash(window.location.hash)
+    const onHashChange = () => openFromHash(window.location.hash)
+    // Next.js same-page <Link href="#x"> uses pushState, which fires no hashchange event
+    const onClick = (e) => {
+      const a = e.target.closest?.('a[href*="#"]')
+      if (!a || a.pathname !== window.location.pathname) return
+      openFromHash(a.hash)
+    }
+    window.addEventListener('hashchange', onHashChange)
+    window.addEventListener('popstate', onHashChange)
+    document.addEventListener('click', onClick)
+    return () => {
+      window.removeEventListener('hashchange', onHashChange)
+      window.removeEventListener('popstate', onHashChange)
+      document.removeEventListener('click', onClick)
+    }
+  }, [systems])
+
+  const select = (id) => {
+    setActive(id)
+    window.history.replaceState(null, '', `#${id}`)
+  }
 
   return (
     <div style={{ border: '1px solid var(--border)', borderRadius: 'var(--r)', overflow: 'hidden', marginBottom: '64px' }}>
       {/* Tab row */}
-      <div style={{ display: 'grid', gridTemplateColumns: 'repeat(5, 1fr)', borderBottom: '1px solid var(--border)' }}>
+      <div role="tablist" aria-label="AI Advantage Systems" style={{ display: 'grid', gridTemplateColumns: 'repeat(5, 1fr)', borderBottom: '1px solid var(--border)' }}>
         {systems.map((s, i) => {
           const isActive = s.id === active
           return (
             <button
               key={s.id}
-              onClick={() => setActive(s.id)}
+              id={s.id}
+              type="button"
+              role="tab"
+              aria-selected={isActive}
+              aria-controls={`${s.id}-panel`}
+              onClick={() => select(s.id)}
               style={{
                 display: 'block', width: '100%', padding: '20px 16px', textAlign: 'left',
                 background: isActive ? 'var(--bg)' : 'var(--bg2)',
@@ -23,7 +58,7 @@ export default function SystemsAccordion({ systems }) {
                 borderBottom: isActive ? '2px solid var(--orange)' : '2px solid transparent',
                 border: 'none', borderRight: i < 4 ? '1px solid var(--border)' : 'none',
                 borderBottom: isActive ? '2px solid var(--orange)' : '2px solid transparent',
-                cursor: 'pointer', transition: 'background 0.15s',
+                cursor: 'pointer', transition: 'background 0.15s', scrollMarginTop: '96px',
               }}
             >
               <div style={{ fontFamily: 'var(--font-mono)', fontSize: '13px', fontWeight: 700, color: 'var(--orange)', marginBottom: '6px' }}>{s.abbr}</div>
@@ -34,8 +69,16 @@ export default function SystemsAccordion({ systems }) {
         })}
       </div>
 
-      {/* Content panel */}
-      <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr' }}>
+      {/* Content panels: all five are in the HTML so crawlers see every system */}
+      {systems.map(sys => (
+      <section
+        key={sys.id}
+        id={`${sys.id}-panel`}
+        role="tabpanel"
+        aria-labelledby={sys.id}
+        hidden={sys.id !== active}
+        style={{ display: sys.id === active ? 'grid' : 'none', gridTemplateColumns: '1fr 1fr' }}
+      >
         {/* Left */}
         <div style={{ padding: '36px 40px', borderRight: '1px solid var(--orange)' }}>
           <div style={{ fontFamily: 'var(--font-mono)', fontSize: '10px', fontWeight: 700, letterSpacing: '0.1em', color: 'var(--orange)', marginBottom: '14px' }}>
@@ -65,7 +108,8 @@ export default function SystemsAccordion({ systems }) {
             Get Started →
           </Link>
         </div>
-      </div>
+      </section>
+      ))}
     </div>
   )
 }
