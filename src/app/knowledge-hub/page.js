@@ -42,11 +42,12 @@ const TYPE_COLORS = {
 async function getBlogPosts() {
   const { data } = await sb
     .from('v_published_posts')
-    .select('id,title,slug,excerpt,published_at,read_time_minutes,category_name')
+    .select('id,title,slug,excerpt,published_at,read_time_minutes,category_name,category_slug,featured_image_public_url,og_image_url')
     .order('published_at', { ascending: false, nullsFirst: false })
     .limit(100)
   return (data ?? []).map(p => ({
     ...p, type: 'blog',
+    cover_image: p.featured_image_public_url || p.og_image_url || `/blog-covers/${p.slug}.svg`,
     duration: p.read_time_minutes ? `${p.read_time_minutes} min read` : null,
   }))
 }
@@ -83,7 +84,8 @@ async function getTemplates() {
 }
 
 export default async function KnowledgeHubPage({ searchParams }) {
-  const activeType = searchParams?.type || null
+  const activeType     = searchParams?.type || null
+  const activeCategory = searchParams?.category || null
 
   let content = []
   if (!activeType || activeType === 'blog')         content = [...content, ...await getBlogPosts()]
@@ -94,6 +96,19 @@ export default async function KnowledgeHubPage({ searchParams }) {
   const upcomingTypes   = HUB_TYPES.filter(t => !t.active)
   const currentType     = HUB_TYPES.find(t => t.key === activeType)
   const isUpcoming      = activeType && !ACTIVE_TYPES.includes(activeType)
+  const isBlogView      = activeType === 'blog'
+
+  // Group blog posts by category, ordered by post count (desc), matching the reference layout
+  let blogCategories = []
+  if (isBlogView) {
+    const byCategory = {}
+    content.forEach(item => {
+      const key = item.category_slug || 'uncategorized'
+      if (!byCategory[key]) byCategory[key] = { slug: key, name: item.category_name || 'Uncategorized', posts: [] }
+      byCategory[key].posts.push(item)
+    })
+    blogCategories = Object.values(byCategory).sort((a, b) => b.posts.length - a.posts.length)
+  }
 
   return (
     <div style={{ background: 'var(--bg)', minHeight: '100vh' }}>
@@ -178,8 +193,59 @@ export default async function KnowledgeHubPage({ searchParams }) {
           </div>
         )}
 
-        {/* Content grid */}
-        {!isUpcoming && (
+        {/* Blog view — grouped by category */}
+        {!isUpcoming && isBlogView && (
+          <div>
+            {content.length === 0 ? (
+              <div style={{ textAlign: 'center', padding: '80px', color: 'var(--text3)', fontFamily: 'var(--font-mono)', fontSize: '12px', letterSpacing: '0.08em' }}>
+                NO CONTENT YET IN THIS CATEGORY
+              </div>
+            ) : (
+              <>
+                <div style={{ fontFamily: 'var(--font-mono)', fontSize: '11px', color: 'var(--text3)', letterSpacing: '0.1em', marginBottom: '20px' }}>
+                  {currentType?.label?.toUpperCase()} · {content.length} ITEMS
+                </div>
+
+                {/* Category chips */}
+                <div style={{ display: 'flex', gap: '4px', overflowX: 'auto', marginBottom: '40px' }}>
+                  <Link href="/knowledge-hub?type=blog" style={{
+                    padding: '7px 16px', borderRadius: '9999px', fontFamily: 'var(--font-mono)', fontSize: '10px',
+                    fontWeight: 600, letterSpacing: '0.07em', textDecoration: 'none', whiteSpace: 'nowrap',
+                    background: !activeCategory ? 'var(--orange)' : 'transparent',
+                    color: !activeCategory ? '#fff' : 'var(--text2)',
+                    border: !activeCategory ? '1px solid var(--orange)' : '1px solid var(--border)',
+                  }}>ALL CATEGORIES</Link>
+                  {blogCategories.map(cat => (
+                    <Link key={cat.slug} href={`/knowledge-hub?type=blog&category=${cat.slug}`} style={{
+                      padding: '7px 16px', borderRadius: '9999px', fontFamily: 'var(--font-mono)', fontSize: '10px',
+                      fontWeight: 600, letterSpacing: '0.07em', textDecoration: 'none', whiteSpace: 'nowrap',
+                      background: activeCategory === cat.slug ? 'var(--orange)' : 'transparent',
+                      color: activeCategory === cat.slug ? '#fff' : 'var(--text2)',
+                      border: activeCategory === cat.slug ? '1px solid var(--orange)' : '1px solid var(--border)',
+                    }}>{cat.name.toUpperCase()} · {cat.posts.length}</Link>
+                  ))}
+                </div>
+
+                {blogCategories
+                  .filter(cat => !activeCategory || activeCategory === cat.slug)
+                  .map(cat => (
+                    <div key={cat.slug} style={{ marginBottom: '56px' }}>
+                      <div style={{ display: 'flex', alignItems: 'baseline', justifyContent: 'space-between', borderBottom: '2px solid var(--orange)', paddingBottom: '12px', marginBottom: '24px' }}>
+                        <h2 style={{ fontFamily: 'var(--font-display)', fontSize: 'clamp(22px,3vw,32px)', fontWeight: 600, letterSpacing: '-0.02em', color: 'var(--text)' }}>{cat.name}</h2>
+                        <span style={{ fontFamily: 'var(--font-mono)', fontSize: '11px', color: 'var(--orange)', fontWeight: 600 }}>{cat.posts.length} POSTS</span>
+                      </div>
+                      <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fill, minmax(320px, 1fr))', gap: '1px', background: 'var(--border)' }}>
+                        {cat.posts.map(item => <HubCard key={`${item.type}-${item.id}`} item={item} />)}
+                      </div>
+                    </div>
+                  ))}
+              </>
+            )}
+          </div>
+        )}
+
+        {/* Non-blog content — flat grid */}
+        {!isUpcoming && !isBlogView && (
           <div>
             {content.length === 0 ? (
               <div style={{ textAlign: 'center', padding: '80px', color: 'var(--text3)', fontFamily: 'var(--font-mono)', fontSize: '12px', letterSpacing: '0.08em' }}>
@@ -212,8 +278,13 @@ function HubCard({ item }) {
       : `/knowledge-hub/${item.slug}`
 
   return (
-    <Link href={href} style={{ display: 'block', background: 'var(--bg)', padding: '32px', textDecoration: 'none', color: 'inherit', position: 'relative', overflow: 'hidden' }}>
-      <div style={{ position: 'absolute', top: 0, left: 0, width: '100%', height: '3px', background: color }} />
+    <Link href={href} style={{ display: 'block', background: 'var(--bg)', textDecoration: 'none', color: 'inherit', position: 'relative', overflow: 'hidden' }}>
+      {item.cover_image ? (
+        <img src={item.cover_image} alt={item.title} style={{ width: '100%', aspectRatio: '16/9', objectFit: 'cover', display: 'block' }} />
+      ) : (
+        <div style={{ position: 'absolute', top: 0, left: 0, width: '100%', height: '3px', background: color }} />
+      )}
+      <div style={{ padding: '32px' }}>
       <div style={{ display: 'flex', alignItems: 'center', gap: '8px', marginBottom: '16px' }}>
         <span style={{ fontFamily: 'var(--font-mono)', fontSize: '10px', fontWeight: 600, letterSpacing: '0.08em', color, background: `${color}15`, padding: '3px 10px', borderRadius: '9999px', border: `1px solid ${color}30` }}>
           {typeInfo?.icon} {item.type?.toUpperCase().replace('-', ' ')}
@@ -236,6 +307,7 @@ function HubCard({ item }) {
         {item.duration && <span style={{ fontFamily: 'var(--font-mono)', fontSize: '10px', color: 'var(--text3)', letterSpacing: '0.05em' }}>{item.duration.toUpperCase()}</span>}
         {item.published_at && <span style={{ fontFamily: 'var(--font-mono)', fontSize: '10px', color: 'var(--text3)', letterSpacing: '0.05em' }}>{new Date(item.published_at).toLocaleDateString('en-IN', { day: 'numeric', month: 'short', year: 'numeric' }).toUpperCase()}</span>}
         <span style={{ fontFamily: 'var(--font-mono)', fontSize: '11px', color, fontWeight: 600, marginLeft: 'auto' }}>→</span>
+      </div>
       </div>
     </Link>
   )

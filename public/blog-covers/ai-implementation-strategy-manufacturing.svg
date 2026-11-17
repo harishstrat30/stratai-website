@@ -1,0 +1,35 @@
+<svg width="1200" height="675" viewBox="0 0 1200 675" xmlns="http://www.w3.org/2000/svg">
+  <rect width="1200" height="675" fill="#0b0b0a"/>
+  <rect width="1200" height="675" fill="#161513" opacity="0.4"/>
+  
+    <defs>
+      <pattern id="dots" width="22" height="22" patternUnits="userSpaceOnUse">
+        <circle cx="2" cy="2" r="1.2" fill="#ffffff" opacity="0.14" />
+      </pattern>
+    </defs>
+    <rect width="1200" height="675" fill="url(#dots)" opacity="0.35" />
+  
+  <rect x="0" y="0" width="1200" height="675" fill="none" stroke="#2a2a28" stroke-width="1"/>
+
+  <g transform="translate(70,44)">
+    <rect x="0" y="10" width="6" height="14" fill="#FF5500"/>
+    <rect x="9" y="4" width="6" height="20" fill="#FF5500"/>
+    <rect x="18" y="0" width="6" height="24" fill="#8a8984"/>
+    <text x="34" y="20" font-family="Arial, sans-serif" font-size="19" font-weight="700" fill="#ffffff">strat<tspan fill="#FF5500">ai</tspan></text>
+  </g>
+
+  <g transform="translate(998,34)">
+    <rect width="132" height="30" rx="15" fill="#FF5500"/>
+    <text x="66" y="20" font-family="Arial, sans-serif" font-size="12" font-weight="700" letter-spacing="1" fill="#ffffff" text-anchor="middle">STRATEGY</text>
+  </g>
+
+  <g opacity="0.9"><circle cx="900" cy="340" r="40" fill="none" stroke="#55534e" stroke-width="1.5" opacity="0.5"/><circle cx="900" cy="340" r="80" fill="none" stroke="#55534e" stroke-width="1.5" opacity="0.5"/><circle cx="900" cy="340" r="120" fill="none" stroke="#55534e" stroke-width="1.5" opacity="0.5"/><circle cx="900" cy="340" r="160" fill="none" stroke="#FF5500" stroke-width="1.5" opacity="0.5"/><circle cx="900" cy="340" r="6" fill="#FF5500"/><line x1="900" y1="340" x2="1050" y2="250" stroke="#FF5500" stroke-width="2" opacity="0.6"/></g>
+
+  <text font-family="Arial, sans-serif" font-size="40" font-weight="700" fill="#ffffff" letter-spacing="-0.5"><tspan x="70" y="290">AI Implementation Strategy for</tspan><tspan x="70" y="342">Manufacturing Companies: The</tspan><tspan x="70" y="394">Difference</tspan></text>
+
+  <text x="70" y="480" font-family="Arial, sans-serif" font-size="16" fill="#9a9994">Most manufacturing companies have an AI implementation strategy. Most of it is tactical, w…</text>
+
+  <line x1="70" y1="615" x2="1130" y2="615" stroke="#2a2a28" stroke-width="1"/>
+  <text x="70" y="641" font-family="Arial, sans-serif" font-size="12" font-weight="700" letter-spacing="1.5" fill="#6f6e69">ASSESS  →  PLAN  →  SCALE</text>
+  <text x="1130" y="641" font-family="Arial, sans-serif" font-size="12" fill="#6f6e69" text-anchor="end">stratai.io</text>
+</svg>

@@ -1,0 +1,35 @@
+<svg width="1200" height="675" viewBox="0 0 1200 675" xmlns="http://www.w3.org/2000/svg">
+  <rect width="1200" height="675" fill="#0b0b0a"/>
+  <rect width="1200" height="675" fill="#161513" opacity="0.4"/>
+  
+    <defs>
+      <pattern id="dots" width="22" height="22" patternUnits="userSpaceOnUse">
+        <circle cx="2" cy="2" r="1.2" fill="#ffffff" opacity="0.14" />
+      </pattern>
+    </defs>
+    <rect width="1200" height="675" fill="url(#dots)" opacity="0.35" />
+  
+  <rect x="0" y="0" width="1200" height="675" fill="none" stroke="#2a2a28" stroke-width="1"/>
+
+  <g transform="translate(70,44)">
+    <rect x="0" y="10" width="6" height="14" fill="#FF5500"/>
+    <rect x="9" y="4" width="6" height="20" fill="#FF5500"/>
+    <rect x="18" y="0" width="6" height="24" fill="#8a8984"/>
+    <text x="34" y="20" font-family="Arial, sans-serif" font-size="19" font-weight="700" fill="#ffffff">strat<tspan fill="#FF5500">ai</tspan></text>
+  </g>
+
+  <g transform="translate(998,34)">
+    <rect width="132" height="30" rx="15" fill="#FF5500"/>
+    <text x="66" y="20" font-family="Arial, sans-serif" font-size="12" font-weight="700" letter-spacing="1" fill="#ffffff" text-anchor="middle">COMPOUND</text>
+  </g>
+
+  <g opacity="0.9"><rect x="750" y="410" width="38" height="40" fill="#3a3936" opacity="0.55" rx="2"/><rect x="810" y="380" width="38" height="70" fill="#3a3936" opacity="0.55" rx="2"/><rect x="870" y="340" width="38" height="110" fill="#3a3936" opacity="0.55" rx="2"/><rect x="930" y="290" width="38" height="160" fill="#FF5500" opacity="0.9" rx="2"/><rect x="990" y="240" width="38" height="210" fill="#FF5500" opacity="0.9" rx="2"/><line x1="730" y1="450" x2="1080" y2="210" stroke="#FF5500" stroke-width="1.5" opacity="0.5" stroke-dasharray="4 5"/></g>
+
+  <text font-family="Arial, sans-serif" font-size="40" font-weight="700" fill="#ffffff" letter-spacing="-0.5"><tspan x="70" y="290">COMPOUND: You Are Using Your</tspan><tspan x="70" y="342">Manufacturing Data. But Only</tspan><tspan x="70" y="394">at</tspan></text>
+
+  <text x="70" y="480" font-family="Arial, sans-serif" font-size="16" fill="#9a9994">The data you have captured and converted is not the ceiling of what your data can do. It i…</text>
+
+  <line x1="70" y1="615" x2="1130" y2="615" stroke="#2a2a28" stroke-width="1"/>
+  <text x="70" y="641" font-family="Arial, sans-serif" font-size="12" font-weight="700" letter-spacing="1.5" fill="#6f6e69">CAPTURE  →  CONVERT  →  COMPOUND</text>
+  <text x="1130" y="641" font-family="Arial, sans-serif" font-size="12" fill="#6f6e69" text-anchor="end">stratai.io</text>
+</svg>
