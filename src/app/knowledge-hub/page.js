@@ -47,7 +47,7 @@ async function getBlogPosts() {
     .limit(100)
   return (data ?? []).map(p => ({
     ...p, type: 'blog',
-    cover_image: p.featured_image_public_url || `/blog-covers/${p.slug}.svg`,
+    cover_image: p.featured_image_public_url || `/blog-covers/${p.slug}.webp`,
     duration: p.read_time_minutes ? `${p.read_time_minutes} min read` : null,
   }))
 }
@@ -280,12 +280,12 @@ function HubCard({ item }) {
   return (
     <Link href={href} style={{ display: 'block', background: 'var(--bg)', textDecoration: 'none', color: 'inherit', position: 'relative', overflow: 'hidden' }}>
       {item.type === 'blog' ? (
-        <div style={{ position: 'relative', aspectRatio: '16/9', background: 'var(--bg-dark)', overflow: 'hidden' }}>
+        <div style={{ position: 'relative', aspectRatio: '2/1', background: 'var(--bg-dark)', overflow: 'hidden' }}>
           <div style={{ position: 'absolute', inset: 0, display: 'flex', alignItems: 'flex-end', padding: '16px', fontFamily: 'var(--font-mono)', fontSize: '10px', letterSpacing: '0.1em', color: 'rgba(255,255,255,0.45)' }}>
             {(item.category_name || 'STRATAI').toUpperCase()}
           </div>
           {item.cover_image && (
-            <div role="img" aria-label={item.title} style={{ position: 'absolute', inset: 0, backgroundImage: `url(${JSON.stringify(item.cover_image)})`, backgroundSize: 'cover', backgroundPosition: 'center' }} />
+            <img src={item.cover_image} alt={item.title} loading="lazy" decoding="async" style={{ position: 'absolute', inset: 0, width: '100%', height: '100%', objectFit: 'cover', display: 'block' }} />
           )}
         </div>
       ) : item.cover_image ? (
