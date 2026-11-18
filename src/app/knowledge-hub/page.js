@@ -42,12 +42,12 @@ const TYPE_COLORS = {
 async function getBlogPosts() {
   const { data } = await sb
     .from('v_published_posts')
-    .select('id,title,slug,excerpt,published_at,read_time_minutes,category_name,category_slug,featured_image_public_url,og_image_url')
+    .select('id,title,slug,excerpt,published_at,read_time_minutes,category_name,category_slug,featured_image_public_url')
     .order('published_at', { ascending: false, nullsFirst: false })
     .limit(100)
   return (data ?? []).map(p => ({
     ...p, type: 'blog',
-    cover_image: p.featured_image_public_url || p.og_image_url || `/blog-covers/${p.slug}.svg`,
+    cover_image: p.featured_image_public_url || `/blog-covers/${p.slug}.svg`,
     duration: p.read_time_minutes ? `${p.read_time_minutes} min read` : null,
   }))
 }
