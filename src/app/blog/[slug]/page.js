@@ -41,7 +41,10 @@ const BLOG_SEO = {
   },
 }
 
-const withBrandSuffix = (t) => `${t.replace(/(\s*\|\s*StratAI™?)+\s*$/i, '').trim()} | StratAI™`
+// Posts whose page top image is the bundled dark cover in /public/blog-covers (instead of their first content image).
+const BUNDLED_COVER_HERO = new Set(['ai-in-manufacturing-oems-drive-ai-adoption-tier-suppliers'])
+
+const withBrandSuffix =(t) => `${t.replace(/(\s*\|\s*StratAI™?)+\s*$/i, '').trim()} | StratAI™`
 const demoteH1 = (html) => html.replace(/<h1(\s|>)/gi, '<h2$1').replace(/<\/h1>/gi, '</h2>')
 
 export async function generateMetadata({ params }) {
@@ -86,10 +89,14 @@ export default async function BlogPostPage({ params }) {
   const workCta      = ctas.blog_work || { text: 'WORK WITH US →', href: '/contact' }
   const faqs         = Array.isArray(post.faqs) ? post.faqs : []
   const keyTakeaways = Array.isArray(post.key_takeaways) ? post.key_takeaways : []
-  // First image goes at top of content; rest in gallery at bottom
-  const heroImage    = post.featured_image_public_url || (images.length > 0 ? images[0].public_url : null)
-  const heroAlt      = post.featured_image_public_url ? post.title : (images[0]?.alt_text || post.title)
-  const galleryImages = post.featured_image_public_url ? images : images.slice(1)
+  // Top image: CMS cover > bundled cover (only for slugs in BUNDLED_COVER_HERO) > first uploaded content image.
+  // Covers are 16:9 and shown in full; content images keep the wider 16:7 crop.
+  const bundledCover = BUNDLED_COVER_HERO.has(params.slug) ? `/blog-covers/${params.slug}.webp` : null
+  const coverImage   = post.featured_image_public_url || bundledCover
+  const heroImage    = coverImage || (images.length > 0 ? images[0].public_url : null)
+  const heroAlt      = coverImage ? post.title : (images[0]?.alt_text || post.title)
+  const heroRatio    = coverImage ? '16/9' : '16/7'
+  const galleryImages = coverImage ? images : images.slice(1)
 
   const schemas = [
     blogPostSchema(post),
@@ -130,7 +137,7 @@ export default async function BlogPostPage({ params }) {
         {/* Hero image — featured_image OR first uploaded content image */}
         {heroImage && (
           <div style={{maxWidth:'960px',margin:'0 auto',padding:'0 24px'}}>
-            <img src={heroImage} alt={heroAlt} style={{width:'100%',aspectRatio:'16/7',objectFit:'cover',display:'block',border:'1px solid var(--border)',borderTop:'none'}} />
+            <img src={heroImage} alt={heroAlt} style={{width:'100%',aspectRatio:heroRatio,objectFit:'cover',display:'block',border:'1px solid var(--border)',borderTop:'none'}} />
           </div>
         )}
 
