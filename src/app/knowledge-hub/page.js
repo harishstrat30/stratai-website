@@ -279,7 +279,16 @@ function HubCard({ item }) {
 
   return (
     <Link href={href} style={{ display: 'block', background: 'var(--bg)', textDecoration: 'none', color: 'inherit', position: 'relative', overflow: 'hidden' }}>
-      {item.cover_image ? (
+      {item.type === 'blog' ? (
+        <div style={{ position: 'relative', aspectRatio: '16/9', background: 'var(--bg-dark)', overflow: 'hidden' }}>
+          <div style={{ position: 'absolute', inset: 0, display: 'flex', alignItems: 'flex-end', padding: '16px', fontFamily: 'var(--font-mono)', fontSize: '10px', letterSpacing: '0.1em', color: 'rgba(255,255,255,0.45)' }}>
+            {(item.category_name || 'STRATAI').toUpperCase()}
+          </div>
+          {item.cover_image && (
+            <div role="img" aria-label={item.title} style={{ position: 'absolute', inset: 0, backgroundImage: `url(${JSON.stringify(item.cover_image)})`, backgroundSize: 'cover', backgroundPosition: 'center' }} />
+          )}
+        </div>
+      ) : item.cover_image ? (
         <img src={item.cover_image} alt={item.title} style={{ width: '100%', aspectRatio: '16/9', objectFit: 'cover', display: 'block' }} />
       ) : (
         <div style={{ position: 'absolute', top: 0, left: 0, width: '100%', height: '3px', background: color }} />
