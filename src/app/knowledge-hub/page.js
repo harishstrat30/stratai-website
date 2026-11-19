@@ -304,7 +304,7 @@ function HubCard({ item }) {
           </span>
         )}
       </div>
-      <h3 style={{ fontFamily: 'var(--font-display)', fontSize: 'clamp(16px,2vw,22px)', fontWeight: 600, letterSpacing: '-0.02em', lineHeight: 1.25, color: 'var(--text)', marginBottom: '10px' }}>
+      <h3 style={{ fontFamily: 'var(--font-display)', fontSize: 'clamp(15px,1.6vw,19px)', fontWeight: 600, letterSpacing: '-0.02em', lineHeight: 1.3, color: 'var(--text)', marginBottom: '10px' }}>
         {item.title}
       </h3>
       {item.excerpt && (
