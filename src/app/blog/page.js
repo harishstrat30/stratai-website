@@ -1,6 +1,7 @@
 
 import { getPosts, getCategories } from '@/lib/supabase'
 import Link from 'next/link'
+import { withPostOverrides } from '@/components/blog/registry'
 export const metadata = {
   title: { absolute: 'AI for Manufacturing Blog | StratAI™ — Insights & Guides' },
   description: "Read StratAI's blog on AI for manufacturing companies — practical insights on AI consulting, transformation, implementation and P&L impact for mid-market manufacturers in India.",
@@ -12,7 +13,8 @@ export const metadata = {
 }
 export default async function BlogPage() {
   const page = 1, cat = null
-  const { posts=[], total=0, limit=50 } = await getPosts({ page:1, limit:50, category:null }).catch(()=>({ posts:[], total:0, limit:50 }))
+  const { posts: rawPosts=[], total=0, limit=50 } = await getPosts({ page:1, limit:50, category:null }).catch(()=>({ posts:[], total:0, limit:50 }))
+  const posts = withPostOverrides(rawPosts)
   const categories = await getCategories().catch(()=>[])
   const totalPages = 1
   return (
