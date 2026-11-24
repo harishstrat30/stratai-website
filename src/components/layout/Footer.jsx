@@ -9,7 +9,7 @@ export default async function Footer() {
     <footer style={{ background: 'var(--bg-dark)', borderTop: '1px solid #1f1f1e' }}>
 
       {/* ── Compelling CTA band ── */}
-      <div style={{ borderBottom: '1px solid #1f1f1e', padding: 'clamp(44px,6vw,72px) clamp(16px,4vw,24px)' }}>
+      <div className="footer-cta" style={{ borderBottom: '1px solid #1f1f1e', padding: 'clamp(44px,6vw,72px) clamp(16px,4vw,24px)' }}>
         <div style={{ maxWidth: '860px', margin: '0 auto', textAlign: 'center' }}>
           <div style={{ fontFamily: 'var(--font-mono)', fontSize: '11px', color: 'var(--orange)', letterSpacing: '0.12em', marginBottom: '18px' }}>
             YOUR NEXT MOVE
