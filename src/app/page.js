@@ -1,8 +1,18 @@
 import { DEFAULT_OG_IMAGE } from '@/lib/og'
-import HomeView from '@/components/home/HomeView'
-import { TRUST } from '@/components/home/content'
-import { supabase, getFeaturedTestimonials, getStats, getTeam } from '@/lib/supabase'
-import { withPostOverrides } from '@/components/blog/registry'
+import HeroSection         from '@/components/sections/HeroSection'
+import ContrastBlock       from '@/components/sections/ContrastBlock'
+import ClienteleSection    from '@/components/sections/ClienteleSection'
+import FeaturesSection     from '@/components/sections/FeaturesSection'
+import StatsSection        from '@/components/sections/StatsSection'
+import CaseStudiesSection  from '@/components/sections/CaseStudiesSection'
+import TestimonialsSection from '@/components/sections/TestimonialsSection'
+import EngagementTeaser    from '@/components/sections/EngagementTeaser'
+import CTASection          from '@/components/sections/CTASection'
+import {
+  getFeaturedServices, getCaseStudies,
+  getFeaturedTestimonials, getStats,
+} from '@/lib/supabase'
+
 
 export const metadata = {
   title: 'AI for Manufacturing Companies in India | StratAI™ — AI Advantage Systems',
@@ -21,28 +31,49 @@ export const metadata = {
   },
 }
 
-// The six newest published posts, newest first (posts with no publish date go last, like the Knowledge Hub).
-async function getLatestPosts() {
-  const { data } = await supabase
-    .from('v_published_posts')
-    .select('id,title,slug,excerpt,published_at,read_time_minutes,author_name,category_name')
-    .order('published_at', { ascending: false, nullsFirst: false })
-    .limit(6)
-  return withPostOverrides(data ?? [])
-}
-
 export default async function HomePage() {
-  const [stats, testimonials, posts, team] = await Promise.all([
-    getStats().catch(() => []),
+  const [services, caseStudies, testimonials, stats] = await Promise.all([
+    getFeaturedServices().catch(() => []),
+    getCaseStudies().catch(() => []),
     getFeaturedTestimonials().catch(() => []),
-    getLatestPosts().catch(() => []),
-    getTeam().catch(() => []),
+    getStats().catch(() => []),
   ])
 
-  // Three client reviews in the order the design uses; fall back to whatever is featured.
-  const withQuote = testimonials.filter(t => t.quote)
-  const picked = TRUST.reviewsOrder.map(n => withQuote.find(t => t.client_name === n)).filter(Boolean)
-  const reviews = (picked.length === 3 ? picked : withQuote).slice(0, 3)
+  // CLA-148: Remove LKN dummy case study
+  const filteredCaseStudies = caseStudies.filter(cs =>
+    cs.slug !== 'lakshmi-krishna-naturals' &&
+    cs.client !== 'Lakshmi Krishna Naturals' &&
+    !cs.title?.toLowerCase().includes('lakshmi')
+  )
 
-  return <HomeView stats={stats} reviews={reviews} posts={posts} team={team} />
+  return (
+    <>
+      {/* M2: New hero */}
+      <HeroSection />
+
+      {/* M2: Core contrast block + 5 systems strip */}
+      <ContrastBlock />
+
+      {/* M2: Stats with new numbers */}
+      <StatsSection stats={stats} />
+
+      {/* Existing: animated features/services section */}
+      <FeaturesSection services={services} />
+
+      {/* M2: Services 4-grid + Engagement 3-step teaser */}
+      <EngagementTeaser />
+
+      {/* M2: Clientele section */}
+      <ClienteleSection />
+
+      {/* Existing: Case Studies (LKN filtered out) */}
+      <CaseStudiesSection caseStudies={filteredCaseStudies} ctas={{}} />
+
+      {/* Existing: Testimonials */}
+      <TestimonialsSection testimonials={testimonials} />
+
+      {/* M2: New CTA */}
+      <CTASection />
+    </>
+  )
 }
