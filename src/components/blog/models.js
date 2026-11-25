@@ -10,7 +10,6 @@ function avatarFor(name = '', url) {
   return key ? LOCAL_AVATARS[key] : null
 }
 const fmtDate = d => (d ? new Date(d).toLocaleDateString('en-GB', { day: 'numeric', month: 'long', year: 'numeric', timeZone: 'UTC' }) : '')
-const dayGap = (a, b) => Math.abs(new Date(a) - new Date(b)) / 86400000
 
 // Closing call to action for posts whose own text has none (this replaces the old page's "WORK WITH US" bar).
 export const CLOSING_CTA = {
@@ -33,7 +32,7 @@ export function modelFromEntry(post, entry) {
     hero: P.heroImage,
     author: { name: P.author.name, role: P.author.role, credentials: P.author.credentials, linkedin: P.author.linkedin, avatar: P.author.avatar, bio: P.author.bio },
     about: P.about || null,
-    metaLine: `${P.author.credentials} · Updated ${P.updated} · ${P.readMinutes} min read`,
+    metaLine: `${P.author.credentials} · ${P.readMinutes} min read`,
     takeaways: P.takeaways,
     blocks: BLOCKS,
     toc: [...BLOCKS.filter(b => b.t === 'h2' && b.toc).map(b => ({ id: b.id, label: b.toc })), { id: 'faqs', label: 'FAQs' }],
@@ -60,7 +59,6 @@ export function modelFromPost(post, { images = [], related = [], bundledCover = 
   const showFaqSection = faqs.length > 0 && !prepared.hasFaq
 
   const published = fmtDate(post.published_at)
-  const updated = post.updated_at && post.published_at && dayGap(post.updated_at, post.published_at) > 1 ? fmtDate(post.updated_at) : ''
   const takeaways = Array.isArray(post.key_takeaways) ? post.key_takeaways.filter(Boolean) : []
   const sameAsIntro = post.summary && post.excerpt && post.summary.slice(0, 60) === post.excerpt.slice(0, 60)
 
@@ -73,7 +71,7 @@ export function modelFromPost(post, { images = [], related = [], bundledCover = 
       name: post.author_name, role: post.author_role, credentials: post.author_credentials,
       linkedin: post.author_linkedin_url, avatar: avatarFor(post.author_name, post.author_avatar_url), bio: post.author_bio,
     } : null,
-    metaLine: [post.author_credentials, published && `Published ${published}`, updated && `Updated ${updated}`, post.read_time_minutes && `${post.read_time_minutes} min read`].filter(Boolean).join(' · '),
+    metaLine: [post.author_credentials, published && `Published ${published}`, post.read_time_minutes && `${post.read_time_minutes} min read`].filter(Boolean).join(' · '),
     overview: post.summary && !sameAsIntro ? post.summary : '',
     takeaways,
     html: prepared.html,
