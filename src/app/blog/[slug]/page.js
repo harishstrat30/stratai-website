@@ -41,8 +41,9 @@ const BLOG_SEO = {
   },
 }
 
-// Posts whose page top image is the bundled dark cover in /public/blog-covers (instead of their first content image).
-const BUNDLED_COVER_HERO = new Set(['ai-in-manufacturing-oems-drive-ai-adoption-tier-suppliers'])
+// Top image of every post page: its cover in /public/blog-covers/{slug}.webp (the same image as its Knowledge Hub card),
+// unless a cover was uploaded in the CMS. The post's own uploaded images (the old top image) go to the gallery under the article.
+const bundledCoverFor = slug => `/blog-covers/${slug}.webp`
 
 const withBrandSuffix =(t) => `${t.replace(/(\s*\|\s*StratAI™?)+\s*$/i, '').trim()} | StratAI™`
 
@@ -105,13 +106,16 @@ export default async function BlogPostPage({ params }) {
 
   // A hand-built article file (posts registered in components/blog/registry.js) wins over the database HTML.
   const entry = NEW_TEMPLATE_POSTS[params.slug]
-  if (entry) return <NewTemplatePost model={modelFromEntry(post, entry)} />
+  if (entry) {
+    const model = modelFromEntry(post, entry)
+    return <NewTemplatePost model={{ ...model, hero: { src: post.featured_image_public_url || bundledCoverFor(params.slug), alt: entry.POST.title } }} />
+  }
 
-  // Top image: CMS cover > bundled cover (only for slugs in BUNDLED_COVER_HERO) > first uploaded content image.
+  // Top image: CMS cover > the post's bundled cover (see bundledCoverFor).
   const [images, related] = await Promise.all([
     post.id ? getContentImages('post', post.id).catch(() => []) : Promise.resolve([]),
     getRelatedPosts(post).catch(() => []),
   ])
-  const bundledCover = BUNDLED_COVER_HERO.has(params.slug) ? `/blog-covers/${params.slug}.webp` : null
+  const bundledCover = bundledCoverFor(params.slug)
   return <NewTemplatePost model={modelFromPost(post, { images, related, bundledCover })} />
 }

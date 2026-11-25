@@ -51,7 +51,9 @@ export function modelFromPost(post, { images = [], related = [], bundledCover = 
   const cover = post.featured_image_public_url || bundledCover
   const firstImage = cover ? null : images[0]
   const hero = cover ? { src: cover, alt: post.title } : firstImage ? { src: firstImage.public_url, alt: firstImage.alt_text || post.title } : null
-  const gallery = cover ? images : images.slice(1)
+  // With the bundled cover on top, the first uploaded image (the former top image) is replaced by it, so it is not repeated
+  // in the gallery; with a CMS cover the first uploaded image is ordinary content and stays.
+  const gallery = post.featured_image_public_url ? images : images.slice(1)
 
   const prepared = prepareArticleHtml(post.content?.html || '', { intro: post.excerpt || '' })
   const faqs = (Array.isArray(post.faqs) ? post.faqs : []).filter(f => f && f.question && f.answer)
