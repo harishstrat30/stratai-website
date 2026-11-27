@@ -12,8 +12,9 @@ export const metadata = {
 
 const PHONE = '+91-9600971045'
 const PHONE_DISPLAY = '+91 96009 71045'
-const ADDRESS = 'Stratworks Consulting LLP, Code Base, SMM Apartments, NRI Gardens, Kumutham Nagar, Saravanampatti, Coimbatore, Tamil Nadu 641035'
-const GMB = 'https://g.page/r/CZnZvXbY2EqyEBI/'
+const ADDRESS = 'Stratworks Consulting LLP, Suite #P3A - 025, Viya Workspace Phase 3, No.4-5/2, Shri Maharishi Tech Park, Om Namasivaya Nagar, Thudiyalur Road, Saravanampatti, Coimbatore - 641 035.'
+// Google Maps listing of the building the office is in (Viya Workspace Phase-3, Shri Maharishi Tech Park).
+const GMB = 'https://www.google.com/maps?cid=11204835657350253965'
 const HOURS = [
   { day: 'Monday – Friday', time: '9:30 AM – 6:00 PM', open: true },
   { day: 'Saturday',        time: 'Closed',             open: false },
@@ -112,7 +113,7 @@ export default function ContactPage() {
 
           <div style={{ borderRadius: '12px', overflow: 'hidden', border: '1px solid var(--border)' }}>
             <iframe
-              src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3915.446!2d76.9832!3d11.0481!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x3ba8f7e3e8cfe8e3%3A0xb24a58d876bdbd99!2sSaravanampatti%2C%20Coimbatore%2C%20Tamil%20Nadu!5e0!3m2!1sen!2sin!4v1683000000000!5m2!1sen!2sin"
+              src="https://www.google.com/maps?q=11.0786422,76.9995455(Viya%20Workspace%20Phase%203)&z=17&output=embed"
               width="100%"
               height="420"
               style={{ border: 0, display: 'block' }}

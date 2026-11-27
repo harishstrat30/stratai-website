@@ -9,7 +9,7 @@ export default async function Footer() {
     <footer style={{ background: 'var(--bg-dark)', borderTop: '1px solid #1f1f1e' }}>
 
       {/* ── Compelling CTA band ── */}
-      <div style={{ borderBottom: '1px solid #1f1f1e', padding: 'clamp(44px,6vw,72px) clamp(16px,4vw,24px)' }}>
+      <div className="footer-cta" style={{ borderBottom: '1px solid #1f1f1e', padding: 'clamp(44px,6vw,72px) clamp(16px,4vw,24px)' }}>
         <div style={{ maxWidth: '860px', margin: '0 auto', textAlign: 'center' }}>
           <div style={{ fontFamily: 'var(--font-mono)', fontSize: '11px', color: 'var(--orange)', letterSpacing: '0.12em', marginBottom: '18px' }}>
             YOUR NEXT MOVE
@@ -20,14 +20,14 @@ export default async function Footer() {
               AI advantage right now.
             </span>
           </h2>
-          <p style={{ fontSize: '16px', color: 'rgba(255,255,255,0.50)', maxWidth: '480px', margin: '0 auto 36px', lineHeight: '1.7' }}>
+          <p style={{ fontSize: '16px', color: 'rgba(255,255,255,0.85)', maxWidth: '480px', margin: '0 auto 36px', lineHeight: '1.7' }}>
             Start your free half-day audit. We identify 3–5 high-value AI use cases specific to your business — no fee, no commitment.
           </p>
           <div style={{ display: 'flex', gap: '12px', justifyContent: 'center', flexWrap: 'wrap' }}>
             <Link href="/contact" style={{ padding: '13px 30px', borderRadius: '9999px', background: 'var(--orange)', border: '1px solid var(--orange)', fontFamily: 'var(--font-mono)', fontSize: '12px', fontWeight: 700, letterSpacing: '0.08em', color: '#fff', textDecoration: 'none' }}>
               → Book Free Half-Day Audit
             </Link>
-            <Link href="/engagement-model" style={{ padding: '13px 30px', borderRadius: '9999px', background: 'transparent', border: '1px solid rgba(255,255,255,0.15)', fontFamily: 'var(--font-mono)', fontSize: '12px', fontWeight: 600, letterSpacing: '0.08em', color: 'rgba(255,255,255,0.65)', textDecoration: 'none' }}>
+            <Link href="/engagement-model" style={{ padding: '13px 30px', borderRadius: '9999px', background: 'transparent', border: '1px solid rgba(255,255,255,0.15)', fontFamily: 'var(--font-mono)', fontSize: '12px', fontWeight: 600, letterSpacing: '0.08em', color: 'rgba(255,255,255,0.95)', textDecoration: 'none' }}>
               How We Work →
             </Link>
           </div>
@@ -42,17 +42,17 @@ export default async function Footer() {
             <div style={{ marginBottom: '14px' }}>
               <StratAILogo size={36} dark={true} animated={false} showText={true} showTM={true} />
             </div>
-            <p style={{ color: 'rgba(255,255,255,0.40)', fontSize: '13px', lineHeight: '1.7', maxWidth: '260px', marginBottom: '18px' }}>
+            <p style={{ color: 'rgba(255,255,255,0.85)', fontSize: '13px', lineHeight: '1.7', maxWidth: '260px', marginBottom: '18px' }}>
               Building AI Advantage Systems for mid-market manufacturing companies. Measurable in your P&L within 6 months.
             </p>
             <a href="mailto:harish@stratai.io" style={{ color: 'var(--orange)', fontFamily: 'var(--font-mono)', fontSize: '12px', textDecoration: 'none', display: 'block', marginBottom: '8px' }}>
               harish@stratai.io
             </a>
-            <a href="tel:+919600971045" style={{ color: 'rgba(255,255,255,0.5)', fontFamily: 'var(--font-mono)', fontSize: '12px', textDecoration: 'none', display: 'block', marginBottom: '8px' }}>
+            <a href="tel:+919600971045" style={{ color: 'rgba(255,255,255,0.92)', fontFamily: 'var(--font-mono)', fontSize: '12px', textDecoration: 'none', display: 'block', marginBottom: '8px' }}>
               +91 96009 71045
             </a>
-            <div style={{ fontFamily: 'var(--font-mono)', fontSize: '11px', color: 'rgba(255,255,255,0.3)', lineHeight: '1.6', marginBottom: '10px' }}>
-              Code Base, SMM Apartments,<br />NRI Gardens, Saravanampatti,<br />Coimbatore 641035
+            <div style={{ fontFamily: 'var(--font-mono)', fontSize: '11px', color: 'rgba(255,255,255,0.85)', lineHeight: '1.6', marginBottom: '10px' }}>
+              Suite #P3A - 025, Viya Workspace Phase 3,<br />No.4-5/2, Shri Maharishi Tech Park,<br />Om Namasivaya Nagar, Thudiyalur Road,<br />Saravanampatti, Coimbatore - 641 035.
             </div>
             <a
               href="https://wa.me/919600971045?text=Hi%20StratAI%2C%20I%20would%20like%20to%20know%20more%20about%20AI%20Advantage%20Systems."
@@ -96,10 +96,10 @@ export default async function Footer() {
             },
           ].map(col => (
             <div key={col.label}>
-              <div style={{ fontFamily: 'var(--font-mono)', fontSize: '10px', fontWeight: 600, letterSpacing: '0.1em', color: 'rgba(255,255,255,0.3)', marginBottom: '14px' }}>{col.label}</div>
+              <div style={{ fontFamily: 'var(--font-mono)', fontSize: '10px', fontWeight: 600, letterSpacing: '0.1em', color: 'rgba(255,255,255,0.7)', marginBottom: '14px' }}>{col.label}</div>
               <div style={{ display: 'flex', flexDirection: 'column', gap: '9px' }}>
                 {col.links.map(([href, label]) => (
-                  <Link key={href} href={href} style={{ color: 'rgba(255,255,255,0.45)', fontSize: '13px', textDecoration: 'none', transition: 'color 0.15s' }}>
+                  <Link key={href} href={href} style={{ color: 'rgba(255,255,255,0.9)', fontSize: '13px', textDecoration: 'none', transition: 'color 0.15s' }}>
                     {label}
                   </Link>
                 ))}
@@ -109,10 +109,10 @@ export default async function Footer() {
         </div>
 
         <div style={{ borderTop: '1px solid #1f1f1e', paddingTop: '20px', display: 'flex', justifyContent: 'space-between', flexWrap: 'wrap', gap: '8px' }}>
-          <span style={{ fontFamily: 'var(--font-mono)', fontSize: '10px', color: 'rgba(255,255,255,0.2)' }}>
+          <span style={{ fontFamily: 'var(--font-mono)', fontSize: '10px', color: 'rgba(255,255,255,0.65)' }}>
             © {year} STRATWORKS CONSULTING LLP · ALL RIGHTS RESERVED.
           </span>
-          <span style={{ fontFamily: 'var(--font-mono)', fontSize: '10px', color: 'rgba(255,255,255,0.2)' }}>
+          <span style={{ fontFamily: 'var(--font-mono)', fontSize: '10px', color: 'rgba(255,255,255,0.65)' }}>
             COIMBATORE, INDIA · AI ADVANTAGE SYSTEMS FOR MANUFACTURING
           </span>
         </div>
